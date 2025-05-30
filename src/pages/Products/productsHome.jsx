@@ -1,15 +1,51 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios'; // Make sure you have axios installed: npm install axios
 import img from '../../images/logoG.png';
 
+// Assuming your API_URL is defined somewhere, e.g., in a config file or directly here for simplicity
+const API_URL = 'http://localhost:5000'; // **Adjust this to your actual backend API URL**
 
 const ProductsHome = () => {
+  const [showPrices, setShowPrices] = useState(false);
+  const [preciosActividades, setPreciosActividades] = useState({
+    unaActividad: 0,
+    paseLibre: 0,
+    estudiante3dias: 0
+  });
+
+  const obtenerPreciosActividades = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/api/activity-prices`);
+      if (response.data) {
+        setPreciosActividades({
+          unaActividad: response.data.unaActividad,
+          paseLibre: response.data.paseLibre,
+          estudiante3dias: response.data.estudiante3dias
+        });
+      }
+    } catch (error) {
+      console.error('Error al obtener precios de actividades:', error);
+      // Optionally, set default prices or show an error message to the user
+    }
+  };
+
+  useEffect(() => {
+    // You had obtenerUsuarios() here, if it's not defined or relevant to this component, remove it.
+    // Otherwise, ensure it's imported and defined.
+    obtenerPreciosActividades();
+  }, []);
+
+  const togglePricesVisibility = () => {
+    setShowPrices(!showPrices);
+  };
+
   return (
     <div className="w-full overflow-x-hidden">
       {/* HERO SECTION - FULL SCREEN */}
-      <section 
-        id="home" 
+      <section
+        id="home"
         className="relative flex items-center justify-center min-h-screen w-full bg-cover bg-center bg-no-repeat bg-fixed"
-        style={{ 
+        style={{
           // backgroundImage: `url(${gymBg})`,
           margin: 0,
           marginTop: 50,
@@ -41,13 +77,43 @@ const ProductsHome = () => {
           <div className="flex flex-col lg:flex-row items-center">
             <div className="lg:w-1/2 mb-10 lg:mb-0 lg:pr-10">
               <h2 className="text-3xl font-bold mb-4">COMIENZA HOY MISMO</h2>
-              <h3 className="text-xl mb-6">Membresias desde $10.000</h3>
+              <h3 className="text-xl mb-6">Membresias desde ${preciosActividades.unaActividad.toLocaleString('es-AR')}</h3> {/* Display base price */}
               <p className="mb-6">Contamos con los mejores precios de la ciudad</p>
-              <button className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-6 rounded-full transition duration-300">
+              <button
+                onClick={togglePricesVisibility}
+                className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-6 rounded-full transition duration-300"
+              >
                 CONSULTAR PRECIOS
               </button>
+
+              {/* Prices Div - Conditionally Rendered */}
+              {showPrices && (
+                <div className="mt-8 p-6 bg-gray-700 rounded-lg shadow-xl animate-fade-in-up">
+                  <h4 className="text-2xl font-bold mb-4">Nuestras Suscripciones:</h4>
+                  <ul className="space-y-3 text-lg">
+                    <li className="flex justify-between items-center bg-gray-600 p-3 rounded">
+                      <span>Pase Libre:</span>
+                      <span className="font-semibold text-yellow-400">${preciosActividades.paseLibre.toLocaleString('es-AR')}</span>
+                    </li>
+                    <li className="flex justify-between items-center bg-gray-600 p-3 rounded">
+                      <span>Estudiante (3 veces por semana):</span>
+                      <span className="font-semibold text-yellow-400">${preciosActividades.estudiante3dias.toLocaleString('es-AR')}</span>
+                    </li>
+                    <li className="flex justify-between items-center bg-gray-600 p-3 rounded">
+                      <span>Una Actividad:</span>
+                      <span className="font-semibold text-yellow-400">${preciosActividades.unaActividad.toLocaleString('es-AR')}</span>
+                    </li>
+                  </ul>
+                  <button
+                    onClick={togglePricesVisibility}
+                    className="mt-6 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full transition duration-300"
+                  >
+                    Cerrar Precios
+                  </button>
+                </div>
+              )}
             </div>
-            
+
             <div className="lg:w-1/2 bg-gray-700 p-8 rounded-lg">
               <h2 className="text-3xl font-bold mb-6">HORARIOS:</h2>
               <div className="space-y-4">
@@ -79,9 +145,9 @@ const ProductsHome = () => {
           <p className="max-w-2xl mx-auto mb-12 text-lg">
             ¿Poco tiempo? Nuestra nueva ubicación te ofrece fácil acceso y un entorno tranquilo para concentrarte en tu entrenamiento.
           </p>
-          
+
           <h1 className="text-4xl font-bold mb-12">¡Nuestro Equipo!</h1>
-          
+
           <div className="flex flex-col md:flex-row justify-center gap-8">
             {/* Mónica */}
             <div className="bg-gray-100 p-6 rounded-lg shadow-lg max-w-xs">
@@ -94,7 +160,7 @@ const ProductsHome = () => {
                 <a href="#" className="text-gray-700 hover:text-yellow-500 text-xl"><i className="fab fa-facebook"></i></a>
               </div>
             </div>
-            
+
             {/* Agustín */}
             <div className="bg-gray-100 p-6 rounded-lg shadow-lg max-w-xs">
               <img src="images/team/agus.png" className="w-full h-64 object-cover rounded mb-4" alt="Agustín Nardoni" />
@@ -105,7 +171,7 @@ const ProductsHome = () => {
                 <a href="#" className="text-gray-700 hover:text-yellow-500 text-xl"><i className="fab fa-instagram"></i></a>
               </div>
             </div>
-            
+
             {/* María */}
             <div className="bg-gray-100 p-6 rounded-lg shadow-lg max-w-xs">
               <img src="images/team/fotomari.jpeg" className="w-full h-64 object-cover rounded mb-4" alt="María Giovagnoli" />
@@ -127,7 +193,7 @@ const ProductsHome = () => {
             <h2 className="text-3xl font-bold mb-4">¡MEJORA TU RENDIMIENTO!</h2>
             <h3 className="text-4xl font-bold">NUESTRAS CLASES</h3>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {/* Body Jump */}
             <div className="bg-white rounded-lg overflow-hidden shadow-lg transition-transform hover:scale-105">
@@ -155,7 +221,7 @@ const ProductsHome = () => {
                 </ul>
               </div>
             </div>
-            
+
             {/* Funcional */}
             <div className="bg-white rounded-lg overflow-hidden shadow-lg transition-transform hover:scale-105">
               <img src="images/class/funcional.webp" className="w-full h-48 object-cover" alt="Funcional" />
@@ -182,7 +248,7 @@ const ProductsHome = () => {
                 </ul>
               </div>
             </div>
-            
+
             {/* Zumba */}
             <div className="bg-white rounded-lg overflow-hidden shadow-lg transition-transform hover:scale-105">
               <img src="images/class/zumba1.jpeg" className="w-full h-48 object-cover" alt="Zumba" />
@@ -209,7 +275,7 @@ const ProductsHome = () => {
                 </ul>
               </div>
             </div>
-            
+
             {/* Body Balance */}
             <div className="bg-white rounded-lg overflow-hidden shadow-lg transition-transform hover:scale-105">
               <img src="images/class/bodibalance.jpg" className="w-full h-48 object-cover" alt="Body Balance" />
@@ -247,7 +313,7 @@ const ProductsHome = () => {
             <h2 className="text-3xl font-bold mb-4">Actividades</h2>
             <h3 className="text-4xl font-bold">Horarios de Clases</h3>
           </div>
-          
+
           <div className="overflow-x-auto">
             <table className="w-full bg-gray-700 rounded-lg overflow-hidden">
               <thead className="bg-gray-900">
@@ -276,42 +342,42 @@ const ProductsHome = () => {
             <div className="lg:w-1/2 mb-10 lg:mb-0 lg:pr-10">
               <h2 className="text-3xl font-bold mb-6">CONTACTO</h2>
               <form className="space-y-4">
-                <input 
-                  type="text" 
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500" 
-                  placeholder="Tu Nombre" 
+                <input
+                  type="text"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                  placeholder="Tu Nombre"
                 />
-                <input 
-                  type="email" 
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500" 
-                  placeholder="Tu Email" 
+                <input
+                  type="email"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                  placeholder="Tu Email"
                 />
-                <textarea 
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500" 
-                  rows="5" 
+                <textarea
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                  rows="5"
                   placeholder="Mensaje"
                 ></textarea>
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-6 rounded-lg transition duration-300"
                 >
                   ENVIAR
                 </button>
               </form>
             </div>
-            
+
             <div className="lg:w-1/2">
               <h2 className="text-3xl font-bold mb-6 text-center lg:text-left">NOS PODES ENCONTRAR EN:</h2>
               <p className="text-xl mb-8 text-center lg:text-left">📍 Gdor.Cespo 2427</p>
-              
+
               <div className="rounded-lg overflow-hidden shadow-lg">
-                <iframe 
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3396.7117452533216!2d-60.705914025045125!3d-31.641741907180513!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95b5a9bc700ed787%3A0x25a926cb4788b434!2sGdor.%20Crespo%202427%2C%20S3000BFI%20Santa%20Fe%20de%20la%20Vera%20Cruz%2C%20Santa%20Fe!5e0!3m2!1ses!2sar!4v1731453478458!5m2!1ses!2sar" 
-                  width="100%" 
-                  height="400" 
-                  style={{border: 0}} 
-                  allowFullScreen="" 
-                  loading="lazy" 
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3396.7117452533216!2d-60.705914025045125!3d-31.641741907180513!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95b5a9bc700ed787%3A0x25a926cb4788b434!2sGdor.%20Crespo%202427%2C%20S3000BFI%20Santa%20Fe%20de%20la%20Vera%20Cruz%2C%20Santa%20Fe!5e0!3m2!1ses!2sar!4v1731453478458!5m2!1ses!2sar"
+                  width="100%"
+                  height="400"
+                  style={{ border: 0 }}
+                  allowFullScreen=""
+                  loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
                   title="Google Maps Location"
                 ></iframe>
@@ -326,9 +392,9 @@ const ProductsHome = () => {
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
-              <p className="text-sm">Copyright &copy; 2024 New Style Gym.</p>
+              <p className="text-sm">Copyright © 2024 New Style Gym.</p>
             </div>
-            
+
             <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-8">
               <p className="flex items-center">
                 <i className="far fa-envelope mr-2"></i>
@@ -339,7 +405,7 @@ const ProductsHome = () => {
                 <span>342-5406918</span>
               </p>
             </div>
-            
+
             <p className="mt-4 md:mt-0 text-sm">
               Designed by: <a href="https://www.linkedin.com/in/tomasmanazza/" className="text-yellow-400 hover:underline">Tomás Manazza</a>
             </p>
