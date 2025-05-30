@@ -1,18 +1,15 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { NavLink, useNavigate } from "react-router-dom";
-const API_URL = "https://newstylegym-back.onrender.com";
-
 import axios from "axios";
-
+import { useContext, useEffect } from "react";
 import authContext from "../../store/store";
-import { useContext } from "react";
-import { useEffect } from "react";
+
+const API_URL = "https://newstylegym-back.onrender.com";
 
 function SignUp() {
   const authCtx = useContext(authContext);
   const navigate = useNavigate();
-  console.log(authCtx);
 
   // Opciones de actividad para el select
   const opcionesActividad = [
@@ -27,62 +24,49 @@ function SignUp() {
     email: "",
     password: "",
     confirmPassword: "",
-    actividad: "", // Nuevo campo de actividad
+    actividad: "",
     termsAndConditions: false,
   };
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required("*Requerido"),
+    name: Yup.string().required("*El nombre es requerido"),
     number: Yup.number()
-      .typeError("*Debe ser un número")
-      .required("*Requerido"),
-    email: Yup.string().email("Formato de email inválido").required("*Requerido"),
-    password: Yup.string().required("*Requerido"),
+      .typeError("*Debe ser un número válido")
+      .required("*El número de teléfono es requerido"),
+    email: Yup.string().email("Formato de email inválido").required("*El email es requerido"),
+    password: Yup.string()
+      .min(6, "*La contraseña debe tener al menos 6 caracteres")
+      .required("*La contraseña es requerida"),
     confirmPassword: Yup.string()
       .oneOf([Yup.ref("password"), null], "Las contraseñas deben coincidir")
-      .required("*Requerido"),
-    actividad: Yup.string() // Validación para el campo de actividad
+      .required("*Confirmar contraseña es requerido"),
+    actividad: Yup.string()
       .oneOf(opcionesActividad, "Por favor selecciona una actividad válida")
-      .required("*Requerido"),
+      .required("*La actividad es requerida"),
     termsAndConditions: Yup.boolean().oneOf(
       [true],
-      "Debes aceptar los términos y condiciones"
+      "Debes aceptar los términos y condiciones para registrarte"
     ),
   });
 
-  const onSubmit = async (values) => {
-    console.log("---------------------------------");
-    console.log("Datos del formulario para crear nuevo usuario", values);
-    console.log("---------------------------------");
+  const onSubmit = async (values, { setSubmitting, setStatus }) => {
     try {
       const data = {
         name: values.name,
         number: values.number.toString(),
         email: values.email,
         password: values.password,
-        actividad: values.actividad, // Incluye la actividad en los datos a enviar
+        actividad: values.actividad,
       };
 
-      axios
-        .post(`${API_URL}/createuser`, data)
-        .then((response) => {
-          console.log("---------------------------------");
-          console.log("Respuesta del servidor:", response);
-          console.log("---------------------------------");
-          navigate("/login");
-        })
-        .catch((error) => {
-          console.log("---------------------------------");
-          console.error("Error al crear usuario:", error);
-          console.log("---------------------------------");
-          alert(error.message || "Ocurrió un error al registrar el usuario.");
-        });
-
+      const response = await axios.post(`${API_URL}/createuser`, data);
+      console.log("Respuesta del servidor:", response);
+      navigate("/login");
     } catch (error) {
-      console.log("---------------------------------");
-      console.error("Error general:", error.message);
-      console.log("---------------------------------");
-      alert(error.message);
+      console.error("Error al crear usuario:", error);
+      setStatus({ error: error.response?.data?.message || "Ocurrió un error al registrar el usuario. Intenta de nuevo." });
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -95,136 +79,140 @@ function SignUp() {
   }, [authCtx, navigate]);
 
   return (
-    <>
-      <div className="bg-slate-600 text-white text-center p-4 h-screen flex items-center max-lg:flex-col max-lg:h-auto">
-        <div className="w-96">
-          <NavLink to="/">
-            <h1 className="backdrop-blur-sm bg-white/30 p-4 max-lg:m-4">
-              CRESCENDO
-            </h1>
-          </NavLink>
-        </div>
-        <div className="flex flex-col">
-          <h1 className="font-light text-center text-2xl">Sign Up</h1>
-          <Formik
-            initialValues={initialValues}
-            validationSchema={validationSchema}
-            onSubmit={onSubmit}
-          >
-            <Form>
-              <div className="p-4 m-2">
+    <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center justify-center p-4">
+      {/* Título principal/Logo del gimnasio */}
+      <NavLink to="/" className="w-full max-w-xs mb-12"> {/* Aumentado el margen inferior */}
+        <h1 className="bg-gradient-to-r from-blue-500 to-purple-600 text-white text-4xl font-extrabold text-center py-6 rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300">
+          NEW STYLE GYM
+        </h1>
+      </NavLink>
+
+      {/* Formulario de registro */}
+      <div className="w-full flex flex-col items-center justify-center bg-gray-800 p-8 rounded-xl shadow-2xl max-w-md"> {/* Ancho fijo para el formulario */}
+        <h2 className="font-extrabold text-center text-4xl mb-8 text-blue-400">Regístrate</h2>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={onSubmit}
+        >
+          {({ isSubmitting, status }) => (
+            <Form className="w-full space-y-6">
+              {/* Campo Nombre */}
+              <div>
                 <Field
-                  className="p-2 outline-none text-center text-black font-bold"
+                  className="w-full p-3 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   type="text"
                   name="name"
-                  placeholder="Nombre"
+                  placeholder="Nombre completo"
                 />
-                <p className="text-red-500 text-sm">
-                  <ErrorMessage name="name" />
-                </p>
+                <ErrorMessage name="name" component="p" className="text-red-400 text-sm mt-1" />
               </div>
-              <div className="p-4 m-2">
+
+              {/* Campo Número de teléfono */}
+              <div>
                 <Field
-                  className="p-2 outline-none text-center text-black font-bold"
+                  className="w-full p-3 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   type="number"
                   name="number"
                   placeholder="Número de teléfono"
                 />
-                <p className="text-red-500 text-sm">
-                  <ErrorMessage name="number" />
-                </p>
+                <ErrorMessage name="number" component="p" className="text-red-400 text-sm mt-1" />
               </div>
-              <div className="p-4 m-2">
+
+              {/* Campo Email */}
+              <div>
                 <Field
-                  className="p-2 outline-none text-center text-black font-bold"
+                  className="w-full p-3 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   type="email"
                   name="email"
-                  placeholder="Email"
+                  placeholder="Tu email"
                 />
-                <p className="text-red-500 text-sm">
-                  <ErrorMessage name="email" />
-                </p>
+                <ErrorMessage name="email" component="p" className="text-red-400 text-sm mt-1" />
               </div>
-              <div className="p-4 m-2">
+
+              {/* Campo Contraseña */}
+              <div>
                 <Field
-                  className="p-2 outline-none text-center text-black font-bold"
+                  className="w-full p-3 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   type="password"
                   name="password"
                   placeholder="Contraseña"
                 />
-                <p className="text-red-500 text-sm">
-                  <ErrorMessage name="password" />
-                </p>
+                <ErrorMessage name="password" component="p" className="text-red-400 text-sm mt-1" />
               </div>
-              <div className="p-4 m-2">
+
+              {/* Campo Confirmar Contraseña */}
+              <div>
                 <Field
-                  className="p-2 outline-none text-center text-black font-bold"
+                  className="w-full p-3 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   type="password"
                   name="confirmPassword"
                   placeholder="Confirmar contraseña"
                 />
-                <p className="text-red-500 text-sm">
-                  <ErrorMessage name="confirmPassword" />
-                </p>
+                <ErrorMessage name="confirmPassword" component="p" className="text-red-400 text-sm mt-1" />
               </div>
 
-              {/* Nuevo campo de actividad */}
-              <div className="p-4 m-2">
+              {/* Campo de selección de Actividad */}
+              <div>
                 <label htmlFor="actividad" className="block text-white text-lg font-medium mb-2">
                   Selecciona tu actividad:
                 </label>
                 <Field
-                  as="select" // Usamos 'as="select"' para renderizar un select
+                  as="select"
                   name="actividad"
                   id="actividad"
-                  className="p-2 outline-none text-center text-black font-bold w-full"
+                  className="w-full p-3 rounded-md bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value="">-- Selecciona una opción --</option> {/* Opción por defecto */}
+                  <option value="">-- Selecciona una opción --</option>
                   {opcionesActividad.map((opcion) => (
                     <option key={opcion} value={opcion}>
                       {opcion}
                     </option>
                   ))}
                 </Field>
-                <p className="text-red-500 text-sm">
-                  <ErrorMessage name="actividad" />
-                </p>
+                <ErrorMessage name="actividad" component="p" className="text-red-400 text-sm mt-1" />
               </div>
 
-              <div>
-                <label>
-                  <Field
-                    className="p-2 outline-none text-center text-black font-bold"
-                    type="checkbox"
-                    name="termsAndConditions"
-                  />
-                  <span className="ml-2">
-                    Acepto los términos y condiciones
-                  </span>
+              {/* Campo de Aceptar Términos y Condiciones */}
+              <div className="flex items-center">
+                <Field
+                  type="checkbox"
+                  name="termsAndConditions"
+                  id="termsAndConditions"
+                  className="h-5 w-5 text-blue-600 rounded focus:ring-blue-500"
+                />
+                <label htmlFor="termsAndConditions" className="ml-2 text-gray-300 cursor-pointer">
+                  Acepto los <NavLink to="/terms" className="text-blue-400 hover:underline">términos y condiciones</NavLink>
                 </label>
-                <p className="text-red-500 text-sm">
-                  <ErrorMessage name="termsAndConditions" />
-                </p>
               </div>
+              <ErrorMessage name="termsAndConditions" component="p" className="text-red-400 text-sm" />
 
+              {/* Mensaje de error general del servidor */}
+              {status && status.error && (
+                <p className="text-red-400 text-center mt-4">{status.error}</p>
+              )}
+
+              {/* Botón de Registrarse */}
               <button
                 type="submit"
-                className="p-2 px-6 border cursor-pointer text-center font-bold hover:bg-white hover:text-black"
+                disabled={isSubmitting}
+                className="w-full py-3 mt-6 bg-blue-600 text-white font-bold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Registrarse
+                {isSubmitting ? "Registrando..." : "Registrarse"}
               </button>
             </Form>
-          </Formik>
-          <p className="mt-12">
-            Al hacer clic en "Registrarse", te registrarás. Si ya tienes una cuenta,
-            entonces haz clic en &nbsp;
-            <NavLink to="/login" className="text-red-500">
-              Iniciar Sesión
-            </NavLink>
-          </p>
-        </div>
+          )}
+        </Formik>
+
+        {/* Enlace para Iniciar Sesión */}
+        <p className="mt-8 text-gray-300 text-center">
+          ¿Ya tienes una cuenta? {" "}
+          <NavLink to="/login" className="text-blue-400 hover:underline font-semibold">
+            Iniciar Sesión
+          </NavLink>
+        </p>
       </div>
-    </>
+    </div>
   );
 }
 
