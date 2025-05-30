@@ -85,9 +85,23 @@ function Index() {
         <nav className="fixed top-0 left-0 right-0 w-full p-2 backdrop-blur-sm bg-black/70 z-10 shadow-lg transition-colors duration-300">
           {/* Este div interno es el que centraliza el contenido y le da el ancho limitado */}
           <div className="container mx-auto flex justify-between items-center px-4 md:px-8">
-            <div>
-              <img src={logo} alt="logo" className="h-24 w-auto" />
+            {/* Contenedor para el logo y el botón de hamburguesa en móviles */}
+            <div className="flex items-center justify-between w-full lg:w-auto"> {/* Modificado aquí */}
+              <div>
+                <img src={logo} alt="logo" className="h-24 w-auto" />
+              </div>
+              {/* Botón de hamburguesa para móviles (SOLO CUANDO EL MENÚ ESTÁ CERRADO) */}
+              <div className="lg:hidden z-20">
+                {!toggle && ( // Muestra el icono de barras solo si el menú está cerrado
+                  <FontAwesomeIcon
+                    icon={faBars}
+                    className="text-white cursor-pointer text-2xl"
+                    onClick={toggleHandler}
+                  />
+                )}
+              </div>
             </div>
+
             {/* Navegación para pantallas grandes */}
             <div className="max-lg:hidden flex items-center space-x-6">
               <NavLink to="/" className="text-white p-3 font-semibold hover:text-blue-400 transition-colors duration-200">
@@ -121,16 +135,6 @@ function Index() {
                 <NavLink to="/login" className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200">
                   Login
                 </NavLink>
-              )}
-            </div>
-            {/* Botón de hamburguesa para móviles (SOLO CUANDO EL MENÚ ESTÁ CERRADO) */}
-            <div className="lg:hidden z-20">
-              {!toggle && ( // Muestra el icono de barras solo si el menú está cerrado
-                <FontAwesomeIcon
-                  icon={faBars}
-                  className="text-white cursor-pointer text-2xl"
-                  onClick={toggleHandler}
-                />
               )}
             </div>
           </div> {/* Fin del div.container */}

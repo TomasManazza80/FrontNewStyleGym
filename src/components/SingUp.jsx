@@ -3,9 +3,13 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ReCAPTCHA from "react-google-recaptcha"; // Importa el componente ReCAPTCHA
+
 const API_URL = import.meta.env.VITE_API_URL;
 
 console.log(API_URL);
+
+// Estilos (se recomienda mover a un archivo CSS o usar Tailwind CSS para mejor práctica)
 const containerStyle = {
   maxWidth: '400px',
   margin: '0 auto',
@@ -55,33 +59,63 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [number, setNumber] = useState("");
+  const [recaptchaToken, setRecaptchaToken] = useState(null); // Estado para el token de reCAPTCHA
   const navigate = useNavigate();
-  
+
   const [hover, setHover] = useState(false);
+
+  // **MUY IMPORTANTE:** Reemplaza 'YOUR_RECAPTCHA_SITE_KEY' con tu clave de sitio de reCAPTCHA real.
+  // Idealmente, esta clave debería cargarse desde una variable de entorno para producción.
+  // Ejemplo: en tu archivo .env, VITE_RECAPTCHA_SITE_KEY="tu_clave_de_sitio"
+  const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY || '6Ld3o1ArAAAAAAg-uNDYFbSCHMiQXz_VglvGsKU6';
+
+  // Función que se llama cuando el reCAPTCHA cambia (es completado)
+  const onRecaptchaChange = (token) => {
+    setRecaptchaToken(token);
+    console.log("reCAPTCHA token:", token); // Para depuración
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    // Verificación básica del token en el frontend
+    // Esto solo asegura que el widget fue "marcado", pero no verifica la validez con Google.
+    if (!recaptchaToken) {
+      toast.error('Por favor, completa el reCAPTCHA.');
+      return;
+    }
 
     axios.post(`${API_URL}/createuser`, {
       name: username,
       email: email,
       password: password,
-      number: number
+      number: number,
+      // Aunque no lo verificaremos en el backend en este ejemplo,
+      // enviamos el token por si en el futuro se decide añadir la verificación.
+      recaptchaToken: recaptchaToken
     })
     .then(function (response) {
       console.log(response);
       toast.success('¡Usuario creado exitosamente!');
     })
     .catch(function (error) {
-      console.log(error);
-      toast.error('Hubo un error al crear el usuario.');
+      console.error("Error al crear el usuario:", error);
+      if (error.response && error.response.data && error.response.data.message) {
+        toast.error(error.response.data.message); // Mostrar mensaje de error específico del backend
+      } else {
+        toast.error('Hubo un error al crear el usuario.');
+      }
+    })
+    .finally(() => {
+      // Restablecer el formulario y el token reCAPTCHA
+      setUsername("");
+      setEmail("");
+      setPassword("");
+      setNumber("");
+      setRecaptchaToken(null); // Limpiar el token después del intento de envío
+      // Si usas reCAPTCHA v2 y quieres resetear el checkbox visual:
+      // Si tienes una ref al componente ReCAPTCHA, podrías hacer recaptchaRef.current.reset();
     });
-
-    // Restablecer el formulario
-    setUsername("");
-    setEmail("");
-    setPassword("");
-    setNumber("");
   };
 
   const redireccionar = () => {
@@ -144,6 +178,17 @@ const SignUp = () => {
             required
           />
         </div>
+
+        {/* Componente ReCAPTCHA */}
+        <div style={{ marginBottom: '15px', display: 'flex', justifyContent: 'center' }}>
+          <ReCAPTCHA
+            sitekey={RECAPTCHA_SITE_KEY}
+            onChange={onRecaptchaChange}
+            // Puedes añadir 'hl="es"' para que el widget se muestre en español si no lo detecta automáticamente
+            // hl="es"
+          />
+        </div>
+
         <button
           type="submit"
           style={hover ? { ...buttonStyle, ...buttonHoverStyle } : buttonStyle}
