@@ -1,0 +1,125 @@
+/* Variables para mantener la consistencia r22 */
+:root {
+  --r22-background-dark: #120e18;
+  --r22-card-background: #1c1825;
+  --r22-primary-purple: #8b00ff;
+  --r22-text-light: #e0e0e0;
+  --r22-text-muted: #b0b0b0;
+  --r22-highlight-color: #d1b4ff;
+}
+
+/* Estilos de la sección del equipo */
+.r22-team-section {
+  padding: 80px 20px;
+  background-color: var(--r22-background-dark);
+  font-family: 'Poppins', sans-serif;
+  color: var(--r22-text-light);
+  display: flex;
+  justify-content: center;
+}
+
+.r22-team-container {
+  max-width: 1200px;
+  width: 100%;
+}
+
+.r22-team-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--r22-text-light);
+  margin-bottom: 50px;
+  text-align: center;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.r22-team-highlight {
+  color: var(--r22-primary-purple);
+  text-shadow: 0 0 10px rgba(139, 0, 255, 0.5);
+}
+
+/* Estilos de la cuadrícula de equipo */
+.r22-team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+/* Estilos de la tarjeta del miembro del equipo */
+.r22-team-card {
+  background: var(--r22-card-background);
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  border: 1px solid rgba(139, 0, 255, 0.2);
+}
+
+.r22-team-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(139, 0, 255, 0.2);
+}
+
+.r22-team-image-wrapper {
+  width: 100%;
+  height: 250px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* **NUEVO: Filtro oscuro para la imagen** */
+.r22-team-image-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* Capa oscura con 40% de opacidad */
+  transition: background-color 0.3s ease;
+  z-index: 1; /* Asegura que la capa esté sobre la imagen */
+}
+
+/* **NUEVO: El filtro se atenúa al pasar el mouse** */
+.r22-team-card:hover .r22-team-image-wrapper::before {
+  background-color: rgba(0, 0, 0, 0); /* Quita el filtro al hacer hover */
+}
+
+.r22-team-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.r22-team-card:hover .r22-team-image {
+  transform: scale(1.1);
+}
+
+.r22-team-content {
+  padding: 25px;
+  text-align: center;
+}
+
+.r22-team-name {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: var(--r22-highlight-color);
+  letter-spacing: 1px;
+}
+
+.r22-team-role {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--r22-primary-purple);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 15px;
+}
+
+.r22-team-bio {
+  font-size: 0.9rem;
+  color: var(--r22-text-muted);
+  line-height: 1.5;
+}

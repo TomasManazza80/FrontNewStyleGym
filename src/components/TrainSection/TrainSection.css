@@ -1,0 +1,94 @@
+/* ====== TRAIN SECTION (estiloR22) ====== */
+.train-section {
+  padding: 6rem 0;
+  background: #000;
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  z-index: 1;
+}
+
+.train-bg-shape {
+  position: absolute;
+  top: -50px;
+  left: -100px;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(177, 151, 252, 0.3), transparent 70%);
+  filter: blur(120px);
+  z-index: 0;
+}
+
+.train-title {
+  font-size: 2.8rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+  letter-spacing: 1px;
+}
+
+.train-title .highlight {
+  color: #B197FC;
+  position: relative;
+}
+
+.train-title .highlight::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: #B197FC;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s ease;
+}
+
+.train-title:hover .highlight::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.train-text {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 2rem;
+  max-width: 500px;
+}
+
+.train-contact {
+  font-size: 1.1rem;
+}
+
+.train-phone {
+  margin-left: 0.8rem;
+  color: #B197FC;
+  font-weight: 700;
+  font-size: 1.2rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.train-phone:hover {
+  color: #fff;
+  text-shadow: 0 0 10px rgba(177, 151, 252, 0.7);
+}
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 768px) {
+  .train-title {
+    font-size: 2.2rem;
+    text-align: center;
+  }
+
+  .train-text {
+    text-align: center;
+    margin: 0 auto 2rem;
+  }
+
+  .train-contact {
+    justify-content: center;
+  }
+}

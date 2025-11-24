@@ -1,0 +1,92 @@
+/* JoinSection.css - Fondo negro intenso */
+.join-section {
+  padding: 5rem 0;
+  background-color: #000000; /* Negro puro */
+  position: relative;
+  overflow: hidden;
+}
+
+.join-container {
+  height: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+.join-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.join-title {
+  font-weight: 700;
+  font-size: 2.5rem;
+  text-transform: capitalize;
+  margin-bottom: 1.5rem;
+  color: #ffffff;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.join-highlight {
+  color: #B197FC;
+  position: relative;
+  display: inline-block;
+}
+
+.join-highlight::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #B197FC;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+
+.join-title:hover .join-highlight::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.join-description {
+  width: 75%;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+/* Efecto de borde luminoso al hacer hover */
+.join-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #B197FC, transparent);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.join-section:hover::before {
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .join-description {
+    width: 90%;
+    font-size: 1rem;
+  }
+  
+  .join-title {
+    font-size: 2rem;
+  }
+}

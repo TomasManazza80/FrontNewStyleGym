@@ -1,0 +1,118 @@
+/* Estilos para el Hero Section */
+.hero-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Estilos nuevos para el video de fondo */
+.hero-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: translate(-50%, -50%);
+  z-index: -2;
+}
+
+/* Estilos nuevos para la capa de superposición */
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* Ajusta la opacidad según tu video */
+  z-index: -1;
+}
+
+/* Tus estilos originales sin modificar */
+.hero-content {
+  position: relative;
+  z-index: 1;
+  text-align: left;
+}
+
+.hero-subtitle {
+  font-size: 1.5rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: #d1b4ff;
+}
+
+.hero-title {
+  font-size: 4rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-top: 10px;
+}
+
+.hero-highlight {
+  color: #9c24ff;
+}
+
+.hero-description {
+  font-size: 1.1rem;
+  margin-top: 20px;
+  max-width: 500px;
+  color: #c0c0c0;
+}
+
+.hero-buttons {
+  margin-top: 30px;
+}
+
+.hero-btn-primary {
+  padding: 12px 24px;
+  background-color: #9c24ff;
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.hero-btn-primary:hover {
+  background-color: #a448ff;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(139, 0, 255, 0.4);
+}
+
+.hero-btn-secondary {
+  padding: 12px 24px;
+  background-color: transparent;
+  color: #fff;
+  border: 2px solid #fff;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 15px;
+  transition: all 0.3s ease;
+}
+
+.hero-btn-secondary:hover {
+  background-color: #fff;
+  color: #120e18;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
+}
+
+/* Media Queries para responsividad */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 3rem;
+  }
+  .hero-subtitle {
+    font-size: 1.2rem;
+  }
+}

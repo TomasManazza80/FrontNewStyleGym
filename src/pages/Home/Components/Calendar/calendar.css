@@ -1,0 +1,183 @@
+/* Variables para mantener la consistencia */
+:root {
+  --background-dark: #120e18; /* Un morado muy oscuro, casi negro */
+  --card-background: #1c1825; /* Un morado oscuro un poco más claro para las tarjetas */
+  --primary-purple: #8b00ff; /* El morado principal de tu logo */
+  --text-light: #e0e0e0;
+  --text-muted: #b0b0b0;
+  --highlight-color: #d1b4ff; /* Un morado más claro para los detalles */
+}
+
+/* Estilos generales del contenedor y tipografía */
+.horarios-section {
+  padding: 80px 20px;
+  background-color: var(--background-dark);
+  font-family: 'Poppins', sans-serif;
+  color: var(--text-light);
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  max-width: 1200px;
+  width: 100%;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--text-light);
+  margin-bottom: 50px;
+  text-align: center;
+  position: relative;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.section-title::after {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 4px;
+  background: var(--primary-purple);
+  margin: 10px auto 0;
+  border-radius: 2px;
+}
+
+.highlight {
+  color: var(--primary-purple);
+  text-shadow: 0 0 10px rgba(139, 0, 255, 0.5); /* Efecto de brillo sutil */
+}
+
+/* Estilos de la cuadrícula de actividades */
+.actividades-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+/* Estilos de la tarjeta individual */
+.actividad-card {
+  background: var(--card-background);
+  border-radius: 15px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid rgba(139, 0, 255, 0.2);
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Efecto de borde degradado al pasar el mouse */
+.actividad-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 2px;
+  background: linear-gradient(45deg, var(--highlight-color), var(--primary-purple));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  border-radius: 15px;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.actividad-card:hover::before {
+  opacity: 1;
+}
+
+/* Estilos de la cabecera y el icono */
+.actividad-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.actividad-icon {
+  font-size: 2.5rem;
+  color: var(--primary-purple);
+  text-shadow: 0 0 8px rgba(139, 0, 255, 0.6);
+  margin-right: 15px;
+}
+
+.actividad-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-light);
+}
+
+.emoji {
+  font-size: 1.2rem;
+  margin-left: 8px;
+  line-height: 1;
+}
+
+/* Estilos de la descripción */
+.actividad-desc {
+  font-size: 1rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  flex-grow: 1;
+  margin-bottom: 20px;
+}
+
+/* Estilos de la caja de horarios */
+.horarios-box {
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 15px;
+  border-radius: 10px;
+  border-left: 3px solid var(--primary-purple);
+}
+
+.horarios-box h4 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--highlight-color);
+  margin: 0 0 10px 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.horarios-box ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.horarios-box li {
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+  color: var(--text-muted);
+  transition: color 0.3s ease;
+  cursor: pointer;
+}
+
+.horarios-box li:hover {
+  color: var(--highlight-color);
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+  .section-title {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-title {
+    font-size: 1.8rem;
+  }
+  .actividad-card {
+    padding: 25px;
+  }
+}
