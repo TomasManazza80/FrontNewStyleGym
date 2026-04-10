@@ -1,0 +1,37 @@
+/* Hero.css - Dashboard Dropset Styles */
+
+/* Scrollbar personalizado para estética iOS */
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+/* Animaciones adicionales */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* Efecto de brillo sutil en cards activas */
+.card-active {
+  animation: pulse-glow 2s infinite;
+}
+
+/* Transición suave para cambio de tema */
+* {
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Ocultar scroll horizontal */
+html, body {
+  overflow-x: hidden;
+}
+
+/* Mejora de renderizado de texto */
+.text-rendering-optimize {
+  text-rendering: optimizeLegibility;
+}

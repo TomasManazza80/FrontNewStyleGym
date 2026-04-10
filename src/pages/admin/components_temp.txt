@@ -1,0 +1,205 @@
+// ========== COMPONENTES FALTANTES PARA ADMIN.JSX ==========
+
+// --- 1. GymProfilesCard ---
+const GymProfilesCard = ({ gymProfiles, setGymProfileAEditar, gymProfileAEditar }) => {
+    const [mostrarModal, setMostrarModal] = useState(false);
+    const [form, setForm] = useState({
+        userId: '',
+        dni: '',
+        fechaNacimiento: '',
+        direccion: '',
+        contactoEmergencia: '',
+        condicionesMedicas: '',
+        alergias: '',
+        grupoSanguineo: '',
+        observaciones: ''
+    });
+    const [usuariosLista, setUsuariosLista] = useState([]);
+    const [mensaje, setMensaje] = useState('');
+    const [error, setError] = useState('');
+
+    useEffect(() => {
+        const fetchUsuarios = async () => {
+            try {
+                const response = await axios.get(`${API_URL}/getAllUsers`);
+                setUsuariosLista(response.data);
+            } catch (err) {
+                console.error('Error cargando usuarios:', err);
+            }
+        };
+        fetchUsuarios();
+    }, []);
+
+    const handleOpenModal = (profile = null) => {
+        if (profile) {
+            setForm({
+                userId: profile.userId,
+                dni: profile.dni || '',
+                fechaNacimiento: profile.fechaNacimiento || '',
+                direccion: profile.direccion || '',
+                contactoEmergencia: profile.contactoEmergencia || '',
+                condicionesMedicas: profile.condicionesMedicas || '',
+                alergias: profile.alergias || '',
+                grupoSanguineo: profile.grupoSanguineo || '',
+                observaciones: profile.observaciones || ''
+            });
+        } else {
+            setForm({
+                userId: '',
+                dni: '',
+                fechaNacimiento: '',
+                direccion: '',
+                contactoEmergencia: '',
+                condicionesMedicas: '',
+                alergias: '',
+                grupoSanguineo: '',
+                observaciones: ''
+            });
+        }
+        setMostrarModal(true);
+    };
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setForm(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const body = { ...form, userId: parseInt(form.userId) };
+            if (gymProfileAEditar) {
+                await axios.put(`${API_URL}/api/gym/profiles/${body.userId}`, body);
+                setMensaje('Perfil actualizado exitosamente');
+            } else {
+                await axios.post(`${API_URL}/api/gym/profiles`, body);
+                setMensaje('Perfil creado exitosamente');
+            }
+            setMostrarModal(false);
+            setTimeout(() => window.location.reload(), 1000);
+        } catch (err) {
+            setError(err.response?.data?.error || 'Error al guardar el perfil');
+        }
+    };
+
+    const handleEliminar = async (id) => {
+        if (!confirm('¿Estás seguro de eliminar este perfil?')) return;
+        try {
+            await axios.delete(`${API_URL}/api/gym/profiles/${id}`);
+            setMensaje('Perfil eliminado exitosamente');
+            setTimeout(() => window.location.reload(), 1000);
+        } catch (err) {
+            setError('Error al eliminar el perfil');
+        }
+    };
+
+    return (
+        <div className={`p-6 rounded-xl shadow-2xl border animate-fadeIn`}
+             style={{ backgroundColor: BACKGROUND_GRADIENT_START, borderColor: BORDER_HIGHLIGHT_COLOR, boxShadow: `0 0 15px ${LIGHT_GLOW_COLOR}05` }}>
+            <div className="flex justify-between items-center mb-6 border-b pb-3" style={{ borderColor: BORDER_HIGHLIGHT_COLOR }}>
+                <h2 className="text-2xl font-bold" style={{ color: TEXT_COLOR_YELLOW, textShadow: `0 0 5px ${LIGHT_GLOW_COLOR}` }}>Perfiles de Gimnasio</h2>
+                <button onClick={() => handleOpenModal()} className="px-6 py-2 font-semibold rounded-lg shadow-md transition hover:scale-105"
+                    style={{ backgroundColor: TEXT_COLOR_YELLOW, color: BACKGROUND_GRADIENT_END, boxShadow: `0 0 8px ${LIGHT_GLOW_COLOR}60` }}>
+                    + Nuevo Perfil
+                </button>
+            </div>
+
+            {mensaje && <div className="mb-4 p-3 rounded-lg animate-fadeIn" style={{ background: `linear-gradient(90deg, #1A472A, #0A3319)`, border: `1px solid ${TEXT_COLOR_YELLOW}` }}><span style={{ color: TEXT_COLOR_WHITE }}>{mensaje}</span></div>}
+            {error && <div className="mb-4 p-3 rounded-lg animate-fadeIn" style={{ background: `linear-gradient(90deg, #5C1D1D, #3D1212)`, border: '1px solid #FF4444' }}><span style={{ color: TEXT_COLOR_WHITE }}>{error}</span></div>}
+
+            {gymProfiles.length === 0 ? (
+                <div className="text-center py-10" style={{ color: TEXT_COLOR_WHITE }}>No hay perfiles registrados</div>
+            ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {gymProfiles.map(profile => (
+                        <div key={profile.id} className={`p-5 rounded-xl border transition-all duration-300 hover:shadow-xl hover:scale-[1.02]`}
+                            style={{ backgroundColor: BACKGROUND_GRADIENT_END, borderColor: BORDER_HIGHLIGHT_COLOR, boxShadow: `0 0 10px ${LIGHT_GLOW_COLOR}10` }}>
+                            <div className="flex justify-between items-start mb-3">
+                                <h3 className="text-lg font-bold" style={{ color: TEXT_COLOR_YELLOW }}>Usuario ID: {profile.userId}</h3>
+                                <div className="flex space-x-1">
+                                    <button onClick={() => handleOpenModal(profile)} className="px-3 py-1 text-sm font-medium rounded-md transition"
+                                        style={{ backgroundColor: BACKGROUND_GRADIENT_START, color: TEXT_COLOR_YELLOW, border: `1px solid ${TEXT_COLOR_YELLOW}` }}>Editar</button>
+                                    <button onClick={() => handleEliminar(profile.id)} className="px-3 py-1 text-sm font-medium rounded-md transition"
+                                        style={{ backgroundColor: BACKGROUND_GRADIENT_END, color: '#FF4444', border: `1px solid #FF4444}` }}>Eliminar</button>
+                                </div>
+                            </div>
+                            <div className="space-y-2 text-sm" style={{ color: TEXT_COLOR_WHITE }}>
+                                {profile.dni && <p><span style={{ color: TEXT_COLOR_YELLOW }}>DNI:</span> {profile.dni}</p>}
+                                {profile.fechaNacimiento && <p><span style={{ color: TEXT_COLOR_YELLOW }}>Nacimiento:</span> {profile.fechaNacimiento}</p>}
+                                {profile.direccion && <p><span style={{ color: TEXT_COLOR_YELLOW }}>Dirección:</span> {profile.direccion}</p>}
+                                {profile.contactoEmergencia && <p><span style={{ color: TEXT_COLOR_YELLOW }}>Contacto Emergencia:</span> {profile.contactoEmergencia}</p>}
+                                {profile.grupoSanguineo && <p><span style={{ color: TEXT_COLOR_YELLOW }}>Grupo Sanguíneo:</span> {profile.grupoSanguineo}</p>}
+                                {profile.condicionesMedicas && <p className="mt-2"><span style={{ color: TEXT_COLOR_YELLOW }}>Condiciones Médicas:</span><br/> {profile.condicionesMedicas}</p>}
+                                {profile.alergias && <p><span style={{ color: TEXT_COLOR_YELLOW }}>Alergias:</span> {profile.alergias}</p>}
+                                {profile.observaciones && <p className="mt-2"><span style={{ color: TEXT_COLOR_YELLOW }}>Observaciones:</span><br/> {profile.observaciones}</p>}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+
+            {mostrarModal && (
+                <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50 p-4 backdrop-blur-sm">
+                    <div className={`p-8 rounded-xl shadow-2xl max-w-md w-full border max-h-[90vh] overflow-y-auto`}
+                        style={{ backgroundColor: BACKGROUND_GRADIENT_START, borderColor: LIGHT_GLOW_COLOR, boxShadow: `0 0 20px ${LIGHT_GLOW_COLOR}40` }}>
+                        <h3 className="text-2xl font-bold mb-6 text-center border-b pb-3" style={{ color: TEXT_COLOR_WHITE, borderColor: BORDER_HIGHLIGHT_COLOR }}>
+                            {gymProfileAEditar ? 'Editar Perfil' : 'Nuevo Perfil'}
+                        </h3>
+                        <form onSubmit={handleSubmit} className="space-y-4">
+                            <div>
+                                <label className="block text-sm font-medium mb-1" style={{ color: TEXT_COLOR_WHITE }}>Usuario *</label>
+                                <select name="userId" value={form.userId} onChange={handleChange} required className="w-full p-3 border rounded-lg"
+                                    style={{ backgroundColor: BACKGROUND_GRADIENT_END, color: TEXT_COLOR_WHITE, borderColor: BORDER_HIGHLIGHT_COLOR }}>
+                                    <option value="">Selecciona un usuario</option>
+                                    {usuariosLista.map(u => <option key={u.id} value={u.id} style={{ backgroundColor: BACKGROUND_GRADIENT_END }}>{u.name} ({u.email})</option>)}
+                                </select>
+                            </div>
+                            <div><label className="block text-sm font-medium mb-1" style={{ color: TEXT_COLOR_WHITE }}>DNI</label>
+                                <input type="text" name="dni" value={form.dni} onChange={handleChange} className="w-full p-3 border rounded-lg"
+                                    style={{ backgroundColor: BACKGROUND_GRADIENT_END, color: TEXT_COLOR_WHITE, borderColor: BORDER_HIGHLIGHT_COLOR }} /></div>
+                            <div><label className="block text-sm font-medium mb-1" style={{ color: TEXT_COLOR_WHITE }}>Fecha de Nacimiento</label>
+                                <input type="date" name="fechaNacimiento" value={form.fechaNacimiento} onChange={handleChange} className="w-full p-3 border rounded-lg"
+                                    style={{ backgroundColor: BACKGROUND_GRADIENT_END, color: TEXT_COLOR_WHITE, borderColor: BORDER_HIGHLIGHT_COLOR }} /></div>
+                            <div><label className="block text-sm font-medium mb-1" style={{ color: TEXT_COLOR_WHITE }}>Dirección</label>
+                                <textarea name="direccion" value={form.direccion} onChange={handleChange} rows="2" className="w-full p-3 border rounded-lg"
+                                    style={{ backgroundColor: BACKGROUND_GRADIENT_END, color: TEXT_COLOR_WHITE, borderColor: BORDER_HIGHLIGHT_COLOR }} /></div>
+                            <div><label className="block text-sm font-medium mb-1" style={{ color: TEXT_COLOR_WHITE }}>Contacto de Emergencia</label>
+                                <input type="text" name="contactoEmergencia" value={form.contactoEmergencia} onChange={handleChange} className="w-full p-3 border rounded-lg"
+                                    style={{ backgroundColor: BACKGROUND_GRADIENT_END, color: TEXT_COLOR_WHITE, borderColor: BORDER_HIGHLIGHT_COLOR }} /></div>
+                            <div><label className="block text-sm font-medium mb-1" style={{ color: TEXT_COLOR_WHITE }}>Condiciones Médicas</label>
+                                <textarea name="condicionesMedicas" value={form.condicionesMedicas} onChange={handleChange} rows="2" className="w-full p-3 border rounded-lg"
+                                    style={{ backgroundColor: BACKGROUND_GRADIENT_END, color: TEXT_COLOR_WHITE, borderColor: BORDER_HIGHLIGHT_COLOR }} /></div>
+                            <div><label className="block text-sm font-medium mb-1" style={{ color: TEXT_COLOR_WHITE }}>Alergias</label>
+                                <textarea name="alergias" value={form.alergias} onChange={handleChange} rows="2" className="w-full p-3 border rounded-lg"
+                                    style={{ backgroundColor: BACKGROUND_GRADIENT_END, color: TEXT_COLOR_WHITE, borderColor: BORDER_HIGHLIGHT_COLOR }} /></div>
+                            <div>
+                                <label className="block text-sm font-medium mb-1" style={{ color: TEXT_COLOR_WHITE }}>Grupo Sanguíneo</label>
+                                <select name="grupoSanguineo" value={form.grupoSanguineo} onChange={handleChange} className="w-full p-3 border rounded-lg"
+                                    style={{ backgroundColor: BACKGROUND_GRADIENT_END, color: TEXT_COLOR_WHITE, borderColor: BORDER_HIGHLIGHT_COLOR }}>
+                                    <option value="">Selecciona</option>
+                                    <option value="A+" style={{ backgroundColor: BACKGROUND_GRADIENT_END }}>A+</option>
+                                    <option value="A-" style={{ backgroundColor: BACKGROUND_GRADIENT_END }}>A-</option>
+                                    <option value="B+" style={{ backgroundColor: BACKGROUND_GRADIENT_END }}>B+</option>
+                                    <option value="B-" style={{ backgroundColor: BACKGROUND_GRADIENT_END }}>B-</option>
+                                    <option value="AB+" style={{ backgroundColor: BACKGROUND_GRADIENT_END }}>AB+</option>
+                                    <option value="AB-" style={{ backgroundColor: BACKGROUND_GRADIENT_END }}>AB-</option>
+                                    <option value="O+" style={{ backgroundColor: BACKGROUND_GRADIENT_END }}>O+</option>
+                                    <option value="O-" style={{ backgroundColor: BACKGROUND_GRADIENT_END }}>O-</option>
+                                </select>
+                            </div>
+                            <div><label className="block text-sm font-medium mb-1" style={{ color: TEXT_COLOR_WHITE }}>Observaciones</label>
+                                <textarea name="observaciones" value={form.observaciones} onChange={handleChange} rows="2" className="w-full p-3 border rounded-lg"
+                                    style={{ backgroundColor: BACKGROUND_GRADIENT_END, color: TEXT_COLOR_WHITE, borderColor: BORDER_HIGHLIGHT_COLOR }} /></div>
+                            <div className="flex justify-end space-x-3 mt-6">
+                                <button type="button" onClick={() => setMostrarModal(false)} className="px-6 py-2 font-semibold rounded-lg transition"
+                                    style={{ backgroundColor: BACKGROUND_GRADIENT_END, color: TEXT_COLOR_WHITE, border: `1px solid ${BORDER_HIGHLIGHT_COLOR}` }}>Cancelar</button>
+                                <button type="submit" className="px-6 py-2 font-semibold rounded-lg transition"
+                                    style={{ backgroundColor: TEXT_COLOR_YELLOW, color: BACKGROUND_GRADIENT_END, boxShadow: `0 0 8px ${LIGHT_GLOW_COLOR}60` }}>Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};

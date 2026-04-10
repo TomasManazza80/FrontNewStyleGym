@@ -1,0 +1,78 @@
+/* Estilos para PlanCard */
+.r22-plan-card {
+    background-color: var(--r22-card-background);
+    border-radius: 15px;
+    padding: 40px 25px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(139, 0, 255, 0.2);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.r22-plan-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(139, 0, 255, 0.4);
+}
+
+.r22-plan-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--r22-highlight-color);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.r22-plan-price {
+    font-size: 3rem;
+    font-weight: 800;
+    color: white; /* <-- AQUI ESTA EL CAMBIO */
+    margin-bottom: 20px;
+    text-shadow: 0 0 15px rgba(139, 0, 255, 0.7);
+}
+
+.r22-plan-desc {
+    font-size: 0.9rem;
+    color: var(--r22-text-muted);
+    min-height: 40px;
+}
+
+.r22-plan-features {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+    text-align: left;
+}
+
+.r22-plan-features li {
+    font-size: 0.95rem;
+    color: var(--r22-text-light);
+    margin-bottom: 10px;
+}
+
+.r22-feature-icon {
+    color: var(--r22-primary-purple);
+    margin-right: 10px;
+}
+
+.featured-plan .r22-plan-card {
+    border: 2px solid var(--r22-primary-purple);
+    position: relative;
+    overflow: hidden;
+}
+
+.featured-plan .r22-plan-card::before {
+    content: 'POPULAR';
+    position: absolute;
+    top: 15px;
+    right: -25px;
+    background: var(--r22-primary-purple);
+    color: white;
+    font-size: 0.8rem;
+    font-weight: bold;
+    padding: 5px 25px;
+    transform: rotate(45deg);
+    text-transform: uppercase;
+}

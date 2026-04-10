@@ -1,0 +1,44 @@
+/* Variables r22 para consistencia de estilo */
+:root {
+    --r22-background-dark: #120e18;
+    --r22-card-background: #1c1825;
+    --r22-primary-purple: #8b00ff;
+    --r22-text-light: #e0e0e0;
+    --r22-text-muted: #b0b0b0;
+    --r22-highlight-color: #d1b4ff;
+}
+
+/* Estilos de la sección de planes */
+.plans-section {
+    padding: 80px 20px;
+    background: linear-gradient(145deg, var(--r22-background-dark), #1d162a);
+    font-family: 'Poppins', sans-serif;
+    color: var(--r22-text-light);
+    text-align: center;
+}
+
+.plans-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--r22-text-light);
+    margin-bottom: 50px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.plans-highlight {
+    color: var(--r22-primary-purple);
+    text-shadow: 0 0 10px rgba(139, 0, 255, 0.5);
+}
+
+.plans-free-class-info {
+    margin-top: 40px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--r22-text-light);
+}
+
+.plans-free-class-info .highlight-fire {
+    color: orange;
+    text-shadow: 0 0 8px orange;
+}
