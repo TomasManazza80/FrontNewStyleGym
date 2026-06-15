@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const BG_START = '#1a1a1a';
-const BG_END = '#0a0a0a';
-const WHITE = '#ffffff';
-const YELLOW = '#fdcc0d';
-const GLOW = '#ffeb3b';
-const BORDER = '#333333';
-
 const API_URL = import.meta.env.VITE_API_URL || 'https://newstylegym-back.onrender.com';
 
 const PlansSection = () => {
@@ -84,15 +77,14 @@ const PlansSection = () => {
   };
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-3xl font-bold" style={{ color: YELLOW, textShadow: `0 0 5px ${GLOW}` }}>
+    <div className="animate-fadeIn">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">
           Planes de Membresía
         </h2>
         <button
           onClick={() => { setEditing(null); setForm({ nombre: '', descripcion: '', precio: '', duracionDias: '', actividadesIncluidas: '', descuentoPorcentaje: 0, activa: true }); setMostrarModal(true); }}
-          style={{ backgroundColor: YELLOW, color: BG_END, boxShadow: `0 0 8px ${GLOW}60` }}
-          className="px-6 py-3 font-semibold rounded-lg shadow-md transition hover:scale-105"
+          className="px-6 py-3 font-bold rounded-2xl bg-[#111111] text-white hover:bg-zinc-800 transition-all active:scale-[0.98] shadow-md"
         >
           + Nuevo Plan
         </button>
@@ -101,41 +93,41 @@ const PlansSection = () => {
       {mensaje && <AlertSuccess msg={mensaje} />}
       {error && <AlertError msg={error} />}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
         {planes.map(plan => (
           <div key={plan.id}
-            className="p-6 rounded-xl border shadow-lg transition hover:shadow-xl hover:scale-[1.02]"
-            style={{ backgroundColor: BG_START, borderColor: BORDER, boxShadow: `0 0 10px ${GLOW}10` }}
+            className="p-6 md:p-8 rounded-3xl bg-slate-50 flex flex-col transition-shadow hover:shadow-sm"
           >
-            <div className="flex justify-between items-start mb-3">
-              <h3 className="text-xl font-bold" style={{ color: YELLOW }}>{plan.nombre}</h3>
-              <span className={`text-xs px-2 py-1 rounded-full ${plan.activa ? 'text-yellow-400' : 'text-gray-400'}`}
-                style={{ backgroundColor: plan.activa ? `${YELLOW}20` : `${BORDER}`, color: plan.activa ? YELLOW : '#888' }}>
+            <div className="flex justify-between items-start mb-4">
+              <h3 className="text-xl font-bold text-gray-900">{plan.nombre}</h3>
+              <span className={`text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full flex-shrink-0 ${plan.activa ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-500'}`}>
                 {plan.activa ? 'ACTIVO' : 'INACTIVO'}
               </span>
             </div>
-            {plan.descripcion && <p className="text-sm mb-3" style={{ color: WHITE, opacity: 0.7 }}>{plan.descripcion}</p>}
-            <div className="space-y-2 mb-4" style={{ color: WHITE }}>
-              <p className="text-lg"><span style={{ color: YELLOW }}>$</span>{plan.precio}</p>
-              <p className="text-sm">{plan.duracionDias} días</p>
+            
+            {plan.descripcion && <p className="text-sm mb-6 text-gray-500 leading-relaxed min-h-[40px]">{plan.descripcion}</p>}
+            
+            <div className="flex-grow"></div>
+            
+            <div className="flex flex-col gap-1 mb-6">
+              <p className="text-4xl font-black text-[#111111] tracking-tighter mb-2"><span className="text-2xl text-gray-400 font-bold mr-1">$</span>{plan.precio}</p>
+              <p className="text-sm font-semibold text-gray-500 uppercase tracking-wide">{plan.duracionDias} días</p>
               {plan.actividadesIncluidas && plan.actividadesIncluidas.length > 0 && (
-                <div className="flex flex-wrap gap-1 mt-2">
+                <div className="flex flex-wrap gap-2 mt-4">
                   {plan.actividadesIncluidas.map((a, i) => (
-                    <span key={i} className="text-xs px-2 py-0.5 rounded-full"
-                      style={{ backgroundColor: `${YELLOW}15`, color: YELLOW }}>{a}</span>
+                    <span key={i} className="text-[10px] font-bold uppercase px-3 py-1.5 rounded-full bg-white border border-gray-100 text-gray-600 shadow-sm">{a}</span>
                   ))}
                 </div>
               )}
             </div>
-            <div className="flex gap-2">
+            
+            <div className="flex gap-3 mt-4 pt-6 border-t border-gray-100">
               <button onClick={() => handleEdit(plan)}
-                className="flex-1 px-3 py-2 rounded-lg text-sm font-medium transition"
-                style={{ backgroundColor: BG_END, color: YELLOW, border: `1px solid ${YELLOW}` }}>
+                className="flex-1 py-3 rounded-2xl text-sm font-bold bg-white border border-gray-200 text-gray-900 hover:bg-gray-50 transition-all active:scale-[0.98]">
                 Editar
               </button>
               <button onClick={() => handleDelete(plan.id)}
-                className="px-3 py-2 rounded-lg text-sm font-medium transition"
-                style={{ backgroundColor: BG_END, color: '#FF4444', border: '1px solid #FF4444' }}>
+                className="flex-1 py-3 rounded-2xl text-sm font-bold bg-red-50 text-red-600 hover:bg-red-100 transition-all active:scale-[0.98]">
                 Eliminar
               </button>
             </div>
@@ -144,7 +136,9 @@ const PlansSection = () => {
       </div>
 
       {planes.length === 0 && (
-        <p className="text-center py-16" style={{ color: '#888' }}>No hay planes creados aún.</p>
+        <div className="p-16 rounded-3xl bg-slate-50 text-center">
+            <p className="text-gray-500 font-medium">No hay planes creados aún.</p>
+        </div>
       )}
 
       {mostrarModal && (
@@ -156,45 +150,45 @@ const PlansSection = () => {
 };
 
 const AlertSuccess = ({ msg }) => (
-  <div className="mb-4 p-3 rounded-lg" style={{ background: 'linear-gradient(90deg, #1A472A, #0A3319)', border: `1px solid ${YELLOW}` }}>
-    <span style={{ color: WHITE }}>{msg}</span>
+  <div className="mb-6 p-4 rounded-2xl bg-green-50 text-green-800 text-sm font-semibold">
+    <span>{msg}</span>
   </div>
 );
 
 const AlertError = ({ msg }) => (
-  <div className="mb-4 p-3 rounded-lg" style={{ background: 'linear-gradient(90deg, #5C1D1D, #3D1212)', border: '1px solid #FF4444' }}>
-    <span style={{ color: WHITE }}>{msg}</span>
+  <div className="mb-6 p-4 rounded-2xl bg-red-50 text-red-800 text-sm font-semibold">
+    <span>{msg}</span>
   </div>
 );
 
 const ModalForm = ({ form, editing, onChange, onSubmit, onClose }) => (
-  <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4 backdrop-blur-sm" onClick={onClose}>
-    <div className="p-8 rounded-xl shadow-2xl max-w-lg w-full animate-scaleIn"
-      style={{ backgroundColor: BG_START, borderColor: GLOW, border: `1px solid ${GLOW}`, boxShadow: `0 0 20px ${GLOW}40` }}
-      onClick={e => e.stopPropagation()}>
-      <h3 className="text-2xl font-bold mb-6 text-center" style={{ color: WHITE }}>
+  <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fadeIn" onClick={onClose}>
+    <div className="p-8 md:p-10 rounded-[32px] bg-white shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto animate-scaleIn" onClick={e => e.stopPropagation()}>
+      <h3 className="text-2xl md:text-3xl font-bold mb-8 text-center text-gray-900 tracking-tight">
         {editing ? 'Editar Plan' : 'Crear Nuevo Plan'}
       </h3>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={onSubmit} className="space-y-6">
         <FieldInput label="Nombre del Plan" name="nombre" value={form.nombre} onChange={onChange} required placeholder="Ej: Plan Trimestral" />
         <FieldInput label="Descripción (opcional)" name="descripcion" value={form.descripcion} onChange={onChange} placeholder="Ej: Acceso completo al gimnasio" />
+        
         <div className="grid grid-cols-2 gap-4">
           <FieldInput label="Precio ($)" name="precio" value={form.precio} onChange={onChange} required placeholder="0.00" type="number" step="0.01" />
           <FieldInput label="Duración (días)" name="duracionDias" value={form.duracionDias} onChange={onChange} required placeholder="30" type="number" />
         </div>
+        
         <FieldInput label="Actividades incluidas (separadas por coma)" name="actividadesIncluidas" value={form.actividadesIncluidas} onChange={onChange} placeholder="Ej: musculación, crossfit, yoga" />
         <FieldInput label="Descuento (%)" name="descuentoPorcentaje" value={form.descuentoPorcentaje} onChange={onChange} placeholder="0" type="number" />
-        <label className="flex items-center gap-2 mb-6 cursor-pointer">
-          <input type="checkbox" name="activa" checked={form.activa} onChange={onChange} className="w-4 h-4 accent-yellow-400" />
-          <span style={{ color: WHITE }}>Plan activo</span>
+        
+        <label className="flex items-center gap-3 mb-6 cursor-pointer p-4 rounded-2xl bg-slate-50 border border-gray-100 hover:bg-gray-100 transition-colors">
+          <input type="checkbox" name="activa" checked={form.activa} onChange={onChange} className="w-5 h-5 accent-[#111111] rounded" />
+          <span className="font-bold text-gray-900">Plan activo y disponible</span>
         </label>
-        <div className="flex justify-end gap-3">
-          <button type="button" onClick={onClose} className="px-6 py-3 rounded-lg font-semibold"
-            style={{ backgroundColor: BG_END, color: WHITE, border: `1px solid ${BORDER}` }}>Cancelar</button>
-          <button type="submit" className="px-6 py-3 rounded-lg font-semibold"
-            style={{ backgroundColor: YELLOW, color: BG_END, boxShadow: `0 0 8px ${GLOW}60` }}>
-            {editing ? 'Actualizar' : 'Crear'}
+        
+        <div className="flex flex-col gap-3 pt-6">
+          <button type="submit" className="w-full py-4 rounded-2xl font-bold text-white bg-[#111111] hover:bg-zinc-800 active:scale-[0.98] transition-all">
+            {editing ? 'Actualizar Plan' : 'Crear Plan'}
           </button>
+          <button type="button" onClick={onClose} className="w-full py-4 text-gray-500 font-bold hover:text-gray-900 transition-all">Cancelar</button>
         </div>
       </form>
     </div>
@@ -202,11 +196,10 @@ const ModalForm = ({ form, editing, onChange, onSubmit, onClose }) => (
 );
 
 const FieldInput = ({ label, name, value, onChange, placeholder, type = 'text', required, step }) => (
-  <div className="mb-4">
-    <label className="block text-sm font-medium mb-1" style={{ color: WHITE }}>{label}</label>
+  <div>
+    <label className="block text-xs font-semibold text-gray-500 mb-2 ml-1">{label}</label>
     <input type={type} name={name} value={value} onChange={onChange} placeholder={placeholder} required={required} step={step}
-      className="w-full p-3 border rounded-lg focus:outline-none focus:ring-1 focus:ring-yellow-400"
-      style={{ backgroundColor: BG_END, color: WHITE, borderColor: BORDER }} />
+      className="w-full p-4 rounded-2xl bg-slate-50 focus:outline-none focus:ring-2 focus:ring-[#111111]/10 text-gray-900 font-medium transition-all" />
   </div>
 );
 

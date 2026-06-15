@@ -15,13 +15,13 @@ import PagosIngresosSection from './components/PagosIngresos';
 import ReservasSection from './components/Reservas';
 import RutinasSection from './components/Rutinas'; // Nuevo: Importar RutinasSection
 
-// --- Dropset Style Constants ---
-const BG_MAIN = '#0A0A0A';
-const BG_CARD = '#1C1C1E';
-const TEXT_PRIMARY = '#FFFFFF';
-const TEXT_SECONDARY = '#8E8E93';
-const BORDER_COLOR = '#2C2C2E';
-const ACCENT = '#FFFFFF';
+// --- Bento Style Constants ---
+const BG_MAIN = '#ffffff';
+const BG_CARD = '#f8fafc'; // bg-slate-50
+const TEXT_PRIMARY = '#111827';
+const TEXT_SECONDARY = '#6b7280';
+const BORDER_COLOR = 'transparent';
+const ACCENT = '#111111';
 
 const API_URL = "http://localhost:3000";
 
@@ -46,23 +46,23 @@ const IconClose = (props) => <svg {...props} fill="none" stroke="currentColor" v
 // Componente de Animación de Carga (Esqueleto) con los nuevos estilos
 const LoadingSkeleton = () => {
     return (
-        <div className={`min-h-screen flex text-white`} style={{ backgroundColor: BG_MAIN }}>
+        <div className="min-h-screen flex bg-white text-gray-900">
             {/* Sidebar Skeleton - Hidden on mobile */}
-            <div className={`hidden md:block w-72 flex-shrink-0 p-6 border-r border-[#2C2C2E] bg-[#0A0A0A]`}>
-                <div className="h-12 rounded-2xl w-12 mx-auto mb-12 bg-[#1C1C1E]"></div>
-                {[...Array(5)].map((_, i) => (
-                    <div key={i} className="flex items-center space-x-3 py-3 px-2 mb-3">
-                        <div className="h-6 w-6 rounded bg-[#1C1C1E]"></div>
-                        <div className="h-6 rounded w-3/4 bg-[#1C1C1E]"></div>
+            <div className="hidden md:block w-64 flex-shrink-0 p-6 bg-[#111111] rounded-r-3xl md:my-4 md:ml-4">
+                <div className="h-10 rounded-2xl w-32 mb-12 bg-white/10"></div>
+                {[...Array(8)].map((_, i) => (
+                    <div key={i} className="flex items-center space-x-3 py-3 px-4 mb-2 rounded-2xl bg-white/5">
+                        <div className="h-6 w-6 rounded-full bg-white/10"></div>
+                        <div className="h-4 rounded-full w-2/3 bg-white/10"></div>
                     </div>
                 ))}
             </div>
             {/* Main Content Skeleton Area */}
-            <div className="flex-grow p-4 md:p-10 animate-pulse">
-                <div className="h-10 rounded-lg w-full md:w-96 mb-8 bg-[#1C1C1E]"></div>
+            <div className="flex-grow p-6 md:p-8 animate-pulse">
+                <div className="h-12 rounded-2xl w-full md:w-64 mb-8 bg-slate-100"></div>
                 <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-                    <div className="xl:col-span-2 h-64 rounded-[28px] bg-[#1C1C1E] border border-[#2C2C2E]"></div>
-                    <div className="h-64 rounded-[28px] bg-[#1C1C1E] border border-[#2C2C2E]"></div>
+                    <div className="xl:col-span-2 h-80 rounded-3xl bg-slate-50"></div>
+                    <div className="h-80 rounded-3xl bg-slate-50"></div>
                 </div>
             </div>
         </div>
@@ -110,49 +110,42 @@ const Sidebar = ({ seccionActiva, setSeccionActiva, sidebarOpen, setSidebarOpen 
             {/* Sidebar */}
             <div className={`
                 fixed md:static inset-y-0 left-0 z-50
-                w-64 flex-shrink-0 p-4 border-r text-white
+                w-64 flex-shrink-0 p-6 bg-[#111111] text-white md:rounded-r-3xl md:my-4 md:ml-4
                 transform transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]
                 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
-            `} style={{ backgroundColor: BG_MAIN }}>
+            `}>
                 {/* Mobile close button */}
-                <div className="flex items-center justify-between mb-8 md:hidden">
-                    <div className="flex items-center">
-                        <span className="text-xl font-black" style={{ color: TEXT_PRIMARY }}>Gym</span>
-                        <span className="text-xl font-black" style={{ color: ACCENT }}>Admin</span>
+                <div className="flex items-center justify-between mb-10 md:hidden">
+                    <div className="flex items-center space-x-1">
+                        <span className="text-xl font-black text-white">Gym</span>
+                        <span className="text-xl font-black text-gray-400">Admin</span>
                     </div>
                     <button
                         onClick={() => setSidebarOpen(false)}
-                        className="p-2 rounded-lg hover:bg-gray-800 transition-colors"
+                        className="p-2 rounded-2xl hover:bg-white/10 transition-colors bg-white/5"
                     >
-                        <IconClose className="w-6 h-6" style={{ color: TEXT_PRIMARY }} />
+                        <IconClose className="w-5 h-5 text-white" />
                     </button>
                 </div>
 
                 {/* Desktop logo */}
-                <div className="hidden md:flex items-center justify-center p-2 mb-10">
-                    <span className="text-2xl font-black" style={{ color: TEXT_PRIMARY }}>Gym</span>
-                    <span className="text-2xl font-black" style={{ color: ACCENT }}>Admin</span>
+                <div className="hidden md:flex items-center justify-start px-2 mb-10 space-x-1">
+                    <span className="text-2xl font-black text-white">Gym</span>
+                    <span className="text-2xl font-black text-gray-400">Admin</span>
                 </div>
 
-                <nav className="space-y-2 md:space-y-3 overflow-y-auto max-h-[calc(100vh-120px)] pb-4">
+                <nav className="space-y-1.5 overflow-y-auto max-h-[calc(100vh-120px)] pb-4 scrollbar-hide">
                     {navItems.map((item, idx) => (
                         <button
                             key={idx}
-                            className={`w-full flex items-center space-x-3 py-2.5 px-4 rounded-xl font-medium transition-all duration-300 transform hover:scale-[1.03]
+                            className={`w-full flex items-center space-x-3 py-3 px-4 rounded-2xl font-medium transition-all duration-300
                               ${seccionActiva === item.name
-                                    ? `text-white shadow-xl ring-2`
-                                    : 'hover:text-white'
+                                    ? 'bg-white text-[#111111] shadow-md'
+                                    : 'text-gray-400 hover:bg-white/10 hover:text-white'
                                 }`}
-                            style={{
-                                color: seccionActiva === item.name ? ACCENT : TEXT_PRIMARY,
-                                background: seccionActiva === item.name ? BG_CARD : 'none',
-                                borderColor: seccionActiva === item.name ? BORDER_COLOR : 'transparent',
-                                boxShadow: seccionActiva === item.name ? `0 0 10px ${ACCENT}20` : 'none',
-                                textShadow: seccionActiva === item.name ? `0 0 5px ${ACCENT}` : 'none'
-                            }}
                             onClick={() => handleNavClick(item.name)}
                         >
-                            <item.icon className="w-5 h-5 md:w-6 md:h-6 flex-shrink-0" style={{ color: seccionActiva === item.name ? ACCENT : TEXT_PRIMARY }} />
+                            <item.icon className={`w-5 h-5 md:w-6 md:h-6 flex-shrink-0 ${seccionActiva === item.name ? 'text-[#111111]' : 'text-gray-400'}`} />
                             <span className="text-sm md:text-base truncate">{item.name}</span>
                         </button>
                     ))}
@@ -231,25 +224,20 @@ const PagosMensualesChart = ({ data }) => {
     }, [data]);
 
     return (
-        <div className="p-8 rounded-[32px] border shadow-2xl transition-all hover:shadow-white/5 animate-fadeIn"
-            style={{
-                backgroundColor: BG_CARD,
-                borderColor: BORDER_COLOR,
-                background: `linear-gradient(145deg, ${BG_CARD} 0%, #151517 100%)`
-            }}>
-            <div className="flex justify-between items-start mb-10">
+        <div className="p-6 md:p-8 rounded-3xl bg-slate-50 transition-all hover:shadow-sm animate-fadeIn h-full flex flex-col">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-8 gap-4">
                 <div>
-                    <h3 className="text-2xl font-black tracking-tighter text-white mb-1">Actividad Mensual</h3>
-                    <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#8E8E93]">Estadísticas de crecimiento y pagos</p>
+                    <h3 className="text-xl font-bold tracking-tight text-gray-900 mb-1">Actividad Mensual</h3>
+                    <p className="text-sm text-gray-500">Estadísticas de crecimiento y pagos</p>
                 </div>
                 <div className="flex gap-4">
                     <div className="flex items-center gap-2">
                         <div className="w-2 h-2 rounded-full" style={{ backgroundColor: '#3B82F6' }}></div>
-                        <span className="text-[9px] font-black uppercase tracking-widest text-[#8E8E93]">Pagos</span>
+                        <span className="text-[9px] font-black uppercase tracking-widest text-gray-500">Pagos</span>
                     </div>
                     <div className="flex items-center gap-2">
                         <div className="w-2 h-2 rounded-full" style={{ backgroundColor: '#A855F7' }}></div>
-                        <span className="text-[9px] font-black uppercase tracking-widest text-[#8E8E93]">Altas</span>
+                        <span className="text-[9px] font-black uppercase tracking-widest text-gray-500">Altas</span>
                     </div>
                 </div>
             </div>
@@ -282,16 +270,16 @@ const PagosMensualesChart = ({ data }) => {
                         />
                         <Tooltip
                             contentStyle={{ 
-                                backgroundColor: 'rgba(28, 28, 30, 0.9)', 
+                                backgroundColor: '#ffffff', 
                                 backdropFilter: 'blur(10px)', 
-                                border: `1px solid ${BORDER_COLOR}`, 
+                                border: `none`, 
                                 borderRadius: '20px',
-                                boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
+                                boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
                                 padding: '12px'
                             }}
                             itemStyle={{ fontSize: '11px', fontWeight: 'bold', textTransform: 'uppercase' }}
                             labelStyle={{ color: '#8E8E93', marginBottom: '8px', fontWeight: 'black', fontSize: '10px' }}
-                            cursor={{ stroke: '#FFFFFF', strokeWidth: 1, strokeDasharray: '4 4' }}
+                            cursor={{ stroke: '#000000', strokeWidth: 1, strokeDasharray: '4 4' }}
                         />
                         <Area 
                             type="monotone" 
@@ -320,13 +308,8 @@ const PagosMensualesChart = ({ data }) => {
 // Componente de Lista de Precios
 const PricesCard = ({ preciosActividades, handleChangePrecio, guardarPreciosActividades }) => {
     return (
-        <div className="p-8 rounded-[28px] border shadow-2xl animate-slideInLeft"
-            style={{
-                backgroundColor: BG_CARD,
-                borderColor: BORDER_COLOR,
-                boxShadow: `0 0 15px ${ACCENT}05`
-            }}>
-            <h3 className="text-xl font-black tracking-tighter mb-6" style={{ color: TEXT_PRIMARY }}>Gestión de Tarifas</h3>
+        <div className="p-6 md:p-8 rounded-3xl bg-slate-50 animate-slideInLeft h-full">
+            <h3 className="text-xl font-bold tracking-tight mb-6 text-gray-900">Gestión de Tarifas</h3>
             <div className="space-y-6">
                 {[
                     { key: 'unaActividad', label: 'Precio - 1 Actividad' },
@@ -342,8 +325,7 @@ const PricesCard = ({ preciosActividades, handleChangePrecio, guardarPreciosActi
                                 name={key}
                                 value={preciosActividades[key]}
                                 onChange={handleChangePrecio}
-                                className="w-full p-4 pl-10 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-white/20 transition-all font-bold"
-                                style={{ backgroundColor: BG_MAIN, color: TEXT_PRIMARY, borderColor: BORDER_COLOR }}
+                                className="w-full p-4 pl-10 rounded-2xl bg-white focus:outline-none focus:ring-2 focus:ring-zinc-900/10 transition-all font-medium text-gray-900"
                                 step="0.01"
                             />
                             <span className="absolute left-3 top-1/2 transform -translate-y-1/2 font-black text-lg" style={{ color: TEXT_SECONDARY }}>$</span>
@@ -353,11 +335,7 @@ const PricesCard = ({ preciosActividades, handleChangePrecio, guardarPreciosActi
             </div>
             <button
                 onClick={guardarPreciosActividades}
-                className="mt-8 w-full py-5 rounded-[20px] font-bold text-lg active:scale-[0.98] transition-all shadow-2xl"
-                style={{
-                    backgroundColor: ACCENT,
-                    color: BG_MAIN,
-                }}
+                className="mt-8 w-full py-4 rounded-2xl font-bold text-white bg-[#111111] hover:bg-zinc-800 active:scale-[0.98] transition-all"
             >
                 Guardar Precios
             </button>
@@ -391,7 +369,7 @@ const CrearUsuarioModal = ({ onSave, onClose, BG_CARD, BORDER_COLOR, BG_MAIN, TE
     };
 
     return (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-xl flex items-center justify-center z-50 p-4 animate-fadeIn" onClick={onClose}>
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-md flex items-center justify-center z-50 p-4 animate-fadeIn" onClick={onClose}>
             <div className="p-8 rounded-[40px] border shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto animate-scaleIn"
                 style={{ backgroundColor: BG_CARD, borderColor: BORDER_COLOR }}
                 onClick={(e) => e.stopPropagation()}>
@@ -402,60 +380,60 @@ const CrearUsuarioModal = ({ onSave, onClose, BG_CARD, BORDER_COLOR, BG_MAIN, TE
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label className="block text-[10px] font-black uppercase tracking-widest mb-2 ml-1" style={{ color: TEXT_SECONDARY }}>Nombre Completo</label>
-                            <input required name="name" value={formData.name} onChange={handleChange} className="w-full p-4 rounded-2xl bg-[#0A0A0A] border border-[#2C2C2E] text-white font-bold" style={{ backgroundColor: BG_MAIN, borderColor: BORDER_COLOR }} />
+                            <input required name="name" value={formData.name} onChange={handleChange} className="w-full p-4 rounded-2xl bg-white border border-black text-black font-bold" style={{ backgroundColor: BG_MAIN, borderColor: BORDER_COLOR }} />
                         </div>
                         <div>
                             <label className="block text-[10px] font-black uppercase tracking-widest mb-2 ml-1" style={{ color: TEXT_SECONDARY }}>Email</label>
-                            <input required type="email" name="email" value={formData.email} onChange={handleChange} className="w-full p-4 rounded-2xl bg-[#0A0A0A] border border-[#2C2C2E] text-white font-bold" style={{ backgroundColor: BG_MAIN, borderColor: BORDER_COLOR }} />
+                            <input required type="email" name="email" value={formData.email} onChange={handleChange} className="w-full p-4 rounded-2xl bg-white border border-black text-black font-bold" style={{ backgroundColor: BG_MAIN, borderColor: BORDER_COLOR }} />
                         </div>
                         <div>
                             <label className="block text-[10px] font-black uppercase tracking-widest mb-2 ml-1" style={{ color: TEXT_SECONDARY }}>Contraseña</label>
-                            <input required type="password" name="password" value={formData.password} onChange={handleChange} className="w-full p-4 rounded-2xl bg-[#0A0A0A] border border-[#2C2C2E] text-white font-bold" style={{ backgroundColor: BG_MAIN, borderColor: BORDER_COLOR }} />
+                            <input required type="password" name="password" value={formData.password} onChange={handleChange} className="w-full p-4 rounded-2xl bg-white border border-black text-black font-bold" style={{ backgroundColor: BG_MAIN, borderColor: BORDER_COLOR }} />
                         </div>
                         <div>
                             <label className="block text-[10px] font-black uppercase tracking-widest mb-2 ml-1" style={{ color: TEXT_SECONDARY }}>Teléfono</label>
-                            <input required name="number" value={formData.number} onChange={handleChange} className="w-full p-4 rounded-2xl bg-[#0A0A0A] border border-[#2C2C2E] text-white font-bold" style={{ backgroundColor: BG_MAIN, borderColor: BORDER_COLOR }} />
+                            <input required name="number" value={formData.number} onChange={handleChange} className="w-full p-4 rounded-2xl bg-white border border-black text-black font-bold" style={{ backgroundColor: BG_MAIN, borderColor: BORDER_COLOR }} />
                         </div>
                         <div>
                             <label className="block text-[10px] font-black uppercase tracking-widest mb-2 ml-1" style={{ color: TEXT_SECONDARY }}>Plan de Actividad</label>
-                            <select name="actividad" value={formData.actividad} onChange={handleChange} className="w-full p-4 rounded-2xl bg-[#0A0A0A] border border-[#2C2C2E] text-white font-bold" style={{ backgroundColor: BG_MAIN, borderColor: BORDER_COLOR }}>
+                            <select name="actividad" value={formData.actividad} onChange={handleChange} className="w-full p-4 rounded-2xl bg-white border border-black text-black font-bold" style={{ backgroundColor: BG_MAIN, borderColor: BORDER_COLOR }}>
                                 {opcionesActividad.map(opc => <option key={opc} value={opc}>{opc}</option>)}
                             </select>
                         </div>
                         <div>
                             <label className="block text-[10px] font-black uppercase tracking-widest mb-2 ml-1" style={{ color: TEXT_SECONDARY }}>Rol</label>
-                            <select name="role" value={formData.role} onChange={handleChange} className="w-full p-4 rounded-2xl bg-[#0A0A0A] border border-[#2C2C2E] text-white font-bold" style={{ backgroundColor: BG_MAIN, borderColor: BORDER_COLOR }}>
+                            <select name="role" value={formData.role} onChange={handleChange} className="w-full p-4 rounded-2xl bg-white border border-black text-black font-bold" style={{ backgroundColor: BG_MAIN, borderColor: BORDER_COLOR }}>
                                 <option value="user">USER</option>
                                 <option value="admin">ADMIN</option>
                             </select>
                         </div>
                         <div>
                             <label className="block text-[10px] font-black uppercase tracking-widest mb-2 ml-1" style={{ color: TEXT_SECONDARY }}>Peso (kg)</label>
-                            <input name="peso" type="number" step="0.1" value={formData.peso} onChange={handleChange} className="w-full p-4 rounded-2xl bg-[#0A0A0A] border border-[#2C2C2E] text-white font-bold" style={{ backgroundColor: BG_MAIN, borderColor: BORDER_COLOR }} />
+                            <input name="peso" type="number" step="0.1" value={formData.peso} onChange={handleChange} className="w-full p-4 rounded-2xl bg-white border border-black text-black font-bold" style={{ backgroundColor: BG_MAIN, borderColor: BORDER_COLOR }} />
                         </div>
                         <div>
                             <label className="block text-[10px] font-black uppercase tracking-widest mb-2 ml-1" style={{ color: TEXT_SECONDARY }}>Altura (cm)</label>
-                            <input name="altura" type="number" step="1" value={formData.altura} onChange={handleChange} className="w-full p-4 rounded-2xl bg-[#0A0A0A] border border-[#2C2C2E] text-white font-bold" style={{ backgroundColor: BG_MAIN, borderColor: BORDER_COLOR }} />
+                            <input name="altura" type="number" step="1" value={formData.altura} onChange={handleChange} className="w-full p-4 rounded-2xl bg-white border border-black text-black font-bold" style={{ backgroundColor: BG_MAIN, borderColor: BORDER_COLOR }} />
                         </div>
                     </div>
                     <div>
                         <label className="block text-[10px] font-black uppercase tracking-widest mb-2 ml-1" style={{ color: TEXT_SECONDARY }}>Días de Entrenamiento</label>
-                        <input name="diasEntrenamiento" placeholder="Ej: Lun, Mie, Vie" value={formData.diasEntrenamiento} onChange={handleChange} className="w-full p-4 rounded-2xl bg-[#0A0A0A] border border-[#2C2C2E] text-white font-bold" style={{ backgroundColor: BG_MAIN, borderColor: BORDER_COLOR }} />
+                        <input name="diasEntrenamiento" placeholder="Ej: Lun, Mie, Vie" value={formData.diasEntrenamiento} onChange={handleChange} className="w-full p-4 rounded-2xl bg-white border border-black text-black font-bold" style={{ backgroundColor: BG_MAIN, borderColor: BORDER_COLOR }} />
                     </div>
                     <div>
                         <label className="block text-[10px] font-black uppercase tracking-widest mb-2 ml-1" style={{ color: TEXT_SECONDARY }}>Historial Médico</label>
-                        <textarea name="historialMedico" rows="2" value={formData.historialMedico} onChange={handleChange} className="w-full p-4 rounded-2xl bg-[#0A0A0A] border border-[#2C2C2E] text-white font-bold resize-none" style={{ backgroundColor: BG_MAIN, borderColor: BORDER_COLOR }} />
+                        <textarea name="historialMedico" rows="2" value={formData.historialMedico} onChange={handleChange} className="w-full p-4 rounded-2xl bg-white border border-black text-black font-bold resize-none" style={{ backgroundColor: BG_MAIN, borderColor: BORDER_COLOR }} />
                     </div>
                     <div>
                         <label className="block text-[10px] font-black uppercase tracking-widest mb-2 ml-1" style={{ color: TEXT_SECONDARY }}>Rutina Correspondiente</label>
-                        <textarea name="rutinaCorrespondiente" rows="2" value={formData.rutinaCorrespondiente} onChange={handleChange} className="w-full p-4 rounded-2xl bg-[#0A0A0A] border border-[#2C2C2E] text-white font-bold resize-none" style={{ backgroundColor: BG_MAIN, borderColor: BORDER_COLOR }} />
+                        <textarea name="rutinaCorrespondiente" rows="2" value={formData.rutinaCorrespondiente} onChange={handleChange} className="w-full p-4 rounded-2xl bg-white border border-black text-black font-bold resize-none" style={{ backgroundColor: BG_MAIN, borderColor: BORDER_COLOR }} />
                     </div>
                     
                     <div className="flex flex-col gap-3 pt-4">
-                        <button type="submit" className="w-full py-5 rounded-[20px] font-bold text-lg active:scale-[0.98] transition-all bg-white text-black shadow-2xl">
+                        <button type="submit" className="w-full py-5 rounded-[20px] font-bold text-lg active:scale-[0.98] transition-all bg-black text-white hover:bg-white hover:text-black border border-black shadow-2xl">
                             Crear Usuario
                         </button>
-                        <button type="button" onClick={onClose} className="w-full py-4 text-white/40 font-bold hover:text-white transition-all">
+                        <button type="button" onClick={onClose} className="w-full py-4 text-black/40 font-bold hover:text-black transition-all">
                             Descartar
                         </button>
                     </div>
@@ -494,7 +472,7 @@ const UserDetailModal = ({ usuario, onSave, onClose, BG_CARD, BORDER_COLOR, BG_M
     };
 
     return (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-xl flex items-center justify-center z-50 p-4 animate-fadeIn" onClick={onClose}>
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-md flex items-center justify-center z-50 p-4 animate-fadeIn" onClick={onClose}>
             <div className="p-8 rounded-[40px] border shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto animate-scaleIn"
                 style={{ backgroundColor: BG_CARD, borderColor: BORDER_COLOR }}
                 onClick={(e) => e.stopPropagation()}>
@@ -505,27 +483,27 @@ const UserDetailModal = ({ usuario, onSave, onClose, BG_CARD, BORDER_COLOR, BG_M
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label className="block text-[10px] font-black uppercase tracking-widest mb-2 ml-1" style={{ color: TEXT_SECONDARY }}>Nombre</label>
-                            <input name="name" value={formData.name} onChange={handleChange} className="w-full p-4 rounded-2xl bg-[#0A0A0A] border border-[#2C2C2E] text-white font-bold" style={{ backgroundColor: BG_MAIN, borderColor: BORDER_COLOR }} />
+                            <input name="name" value={formData.name} onChange={handleChange} className="w-full p-4 rounded-2xl bg-white border border-black text-black font-bold" style={{ backgroundColor: BG_MAIN, borderColor: BORDER_COLOR }} />
                         </div>
                         <div>
                             <label className="block text-[10px] font-black uppercase tracking-widest mb-2 ml-1" style={{ color: TEXT_SECONDARY }}>Email</label>
-                            <input name="email" value={formData.email} onChange={handleChange} className="w-full p-4 rounded-2xl bg-[#0A0A0A] border border-[#2C2C2E] text-white font-bold" style={{ backgroundColor: BG_MAIN, borderColor: BORDER_COLOR }} />
+                            <input name="email" value={formData.email} onChange={handleChange} className="w-full p-4 rounded-2xl bg-white border border-black text-black font-bold" style={{ backgroundColor: BG_MAIN, borderColor: BORDER_COLOR }} />
                         </div>
                         <div>
                             <label className="block text-[10px) font-black uppercase tracking-widest mb-2 ml-1" style={{ color: TEXT_SECONDARY }}>Teléfono</label>
-                            <input name="number" value={formData.number} onChange={handleChange} className="w-full p-4 rounded-2xl bg-[#0A0A0A] border border-[#2C2C2E] text-white font-bold" style={{ backgroundColor: BG_MAIN, borderColor: BORDER_COLOR }} />
+                            <input name="number" value={formData.number} onChange={handleChange} className="w-full p-4 rounded-2xl bg-white border border-black text-black font-bold" style={{ backgroundColor: BG_MAIN, borderColor: BORDER_COLOR }} />
                         </div>
                         <div>
                             <label className="block text-[10px] font-black uppercase tracking-widest mb-2 ml-1" style={{ color: TEXT_SECONDARY }}>Peso (kg)</label>
-                            <input name="peso" type="number" step="0.1" value={formData.peso} onChange={handleChange} className="w-full p-4 rounded-2xl bg-[#0A0A0A] border border-[#2C2C2E] text-white font-bold" style={{ backgroundColor: BG_MAIN, borderColor: BORDER_COLOR }} />
+                            <input name="peso" type="number" step="0.1" value={formData.peso} onChange={handleChange} className="w-full p-4 rounded-2xl bg-white border border-black text-black font-bold" style={{ backgroundColor: BG_MAIN, borderColor: BORDER_COLOR }} />
                         </div>
                         <div>
                             <label className="block text-[10px] font-black uppercase tracking-widest mb-2 ml-1" style={{ color: TEXT_SECONDARY }}>Altura (cm)</label>
-                            <input name="altura" type="number" step="1" value={formData.altura} onChange={handleChange} className="w-full p-4 rounded-2xl bg-[#0A0A0A] border border-[#2C2C2E] text-white font-bold" style={{ backgroundColor: BG_MAIN, borderColor: BORDER_COLOR }} />
+                            <input name="altura" type="number" step="1" value={formData.altura} onChange={handleChange} className="w-full p-4 rounded-2xl bg-white border border-black text-black font-bold" style={{ backgroundColor: BG_MAIN, borderColor: BORDER_COLOR }} />
                         </div>
                         <div>
                             <label className="block text-[10px] font-black uppercase tracking-widest mb-2 ml-1" style={{ color: TEXT_SECONDARY }}>Rol</label>
-                            <select name="role" value={formData.role} onChange={handleChange} className="w-full p-4 rounded-2xl bg-[#0A0A0A] border border-[#2C2C2E] text-white font-bold" style={{ backgroundColor: BG_MAIN, borderColor: BORDER_COLOR }}>
+                            <select name="role" value={formData.role} onChange={handleChange} className="w-full p-4 rounded-2xl bg-white border border-black text-black font-bold" style={{ backgroundColor: BG_MAIN, borderColor: BORDER_COLOR }}>
                                 <option value="user">USER</option>
                                 <option value="admin">ADMIN</option>
                             </select>
@@ -533,22 +511,22 @@ const UserDetailModal = ({ usuario, onSave, onClose, BG_CARD, BORDER_COLOR, BG_M
                     </div>
                     <div>
                         <label className="block text-[10px] font-black uppercase tracking-widest mb-2 ml-1" style={{ color: TEXT_SECONDARY }}>Días de Entrenamiento</label>
-                        <input name="diasEntrenamiento" placeholder="Ej: Lun, Mie, Vie" value={formData.diasEntrenamiento} onChange={handleChange} className="w-full p-4 rounded-2xl bg-[#0A0A0A] border border-[#2C2C2E] text-white font-bold" style={{ backgroundColor: BG_MAIN, borderColor: BORDER_COLOR }} />
+                        <input name="diasEntrenamiento" placeholder="Ej: Lun, Mie, Vie" value={formData.diasEntrenamiento} onChange={handleChange} className="w-full p-4 rounded-2xl bg-white border border-black text-black font-bold" style={{ backgroundColor: BG_MAIN, borderColor: BORDER_COLOR }} />
                     </div>
                     <div>
                         <label className="block text-[10px] font-black uppercase tracking-widest mb-2 ml-1" style={{ color: TEXT_SECONDARY }}>Historial Médico</label>
-                        <textarea name="historialMedico" rows="2" value={formData.historialMedico} onChange={handleChange} className="w-full p-4 rounded-2xl bg-[#0A0A0A] border border-[#2C2C2E] text-white font-bold resize-none" style={{ backgroundColor: BG_MAIN, borderColor: BORDER_COLOR }} />
+                        <textarea name="historialMedico" rows="2" value={formData.historialMedico} onChange={handleChange} className="w-full p-4 rounded-2xl bg-white border border-black text-black font-bold resize-none" style={{ backgroundColor: BG_MAIN, borderColor: BORDER_COLOR }} />
                     </div>
                     <div>
                         <label className="block text-[10px] font-black uppercase tracking-widest mb-2 ml-1" style={{ color: TEXT_SECONDARY }}>Rutina Correspondiente</label>
-                        <textarea name="rutinaCorrespondiente" rows="2" value={formData.rutinaCorrespondiente} onChange={handleChange} className="w-full p-4 rounded-2xl bg-[#0A0A0A] border border-[#2C2C2E] text-white font-bold resize-none" style={{ backgroundColor: BG_MAIN, borderColor: BORDER_COLOR }} />
+                        <textarea name="rutinaCorrespondiente" rows="2" value={formData.rutinaCorrespondiente} onChange={handleChange} className="w-full p-4 rounded-2xl bg-white border border-black text-black font-bold resize-none" style={{ backgroundColor: BG_MAIN, borderColor: BORDER_COLOR }} />
                     </div>
                     
                     <div className="flex flex-col gap-3 pt-4">
-                        <button type="submit" className="w-full py-5 rounded-[20px] font-bold text-lg active:scale-[0.98] transition-all bg-white text-black shadow-2xl">
+                        <button type="submit" className="w-full py-5 rounded-[20px] font-bold text-lg active:scale-[0.98] transition-all bg-black text-white hover:bg-white hover:text-black border border-black shadow-2xl">
                             Guardar cambios
                         </button>
-                        <button type="button" onClick={onClose} className="w-full py-4 text-white/40 font-bold hover:text-white transition-all">
+                        <button type="button" onClick={onClose} className="w-full py-4 text-black/40 font-bold hover:text-black transition-all">
                             Descartar
                         </button>
                     </div>
@@ -567,7 +545,7 @@ const EditarActividadModal = ({ producto, onGuardarCambios, setProductoAEditar, 
     };
 
     return (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-xl flex items-center justify-center z-50 p-4 transition-all animate-fadeIn" onClick={() => setProductoAEditar(null)}>
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-md flex items-center justify-center z-50 p-4 transition-all animate-fadeIn" onClick={() => setProductoAEditar(null)}>
             <div className="p-10 rounded-[40px] shadow-2xl max-w-2xl w-full animate-scaleIn border"
                 style={{
                     backgroundColor: BG_CARD,
@@ -602,7 +580,7 @@ const EditarActividadModal = ({ producto, onGuardarCambios, setProductoAEditar, 
                     </button>
                     <button
                         onClick={() => setProductoAEditar(null)}
-                        className="w-full py-4 rounded-[20px] font-bold transition-all text-white/60"
+                        className="w-full py-4 rounded-[20px] font-bold transition-all text-black/60"
                         style={{ backgroundColor: 'transparent' }}
                     >
                         Descartar
@@ -898,19 +876,14 @@ const Admin = () => {
     }
 
     return (
-        <div className={`min-h-screen flex text-white font-sans`} style={{ backgroundColor: BG_MAIN }}>
+        <div className="min-h-screen flex bg-white font-sans text-gray-900">
             {/* 1. Sidebar */}
             <Sidebar seccionActiva={seccionActiva} setSeccionActiva={setSeccionActiva} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
             {/* 2. Contenido Principal */}
-            <div className="flex-grow flex flex-col min-h-screen p-4 md:p-6 lg:p-8">
+            <div className="flex-grow flex flex-col min-h-screen p-4 md:p-6 lg:p-8 bg-white overflow-x-hidden">
                 {/* Header */}
-                <div className={`flex items-center justify-between md:justify-end gap-4 mb-6 md:mb-8 p-3 md:p-4 rounded-xl border animate-slideInDown`}
-                    style={{
-                        backgroundColor: BG_CARD,
-                        borderColor: BORDER_COLOR,
-                        boxShadow: `0 0 10px ${ACCENT}05`
-                    }}>
+                <div className="flex items-center justify-between md:justify-end gap-4 mb-6 md:mb-8 p-4 md:px-6 rounded-3xl bg-slate-50 animate-slideInDown">
                     {/* Mobile menu button */}
                     <button
                         onClick={() => setSidebarOpen(true)}
@@ -920,7 +893,7 @@ const Admin = () => {
                         <IconMenu className="w-6 h-6" style={{ color: ACCENT }} />
                     </button>
 
-                    <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-extrabold flex-grow" style={{ color: TEXT_PRIMARY }}>
+                    <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold tracking-tight text-gray-900 flex-grow">
                         Bienvenido 👋
                     </h1>
                 </div>
@@ -950,62 +923,36 @@ const Admin = () => {
                             </div>
 
                             {/* Tarjeta de Resumen */}
-                            <div className="p-8 rounded-[28px] border shadow-2xl animate-slideInRight"
-                                style={{
-                                    backgroundColor: BG_CARD,
-                                    borderColor: BORDER_COLOR,
-                                    boxShadow: `0 0 15px ${ACCENT}05`
-                                }}>
-                                <h3 className="text-xl font-black tracking-tighter mb-6" style={{ color: TEXT_PRIMARY }}>Resumen del Gimnasio</h3>
-                                <div className="space-y-4">
-                                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 p-4 rounded-2xl transition-all active:scale-[0.98] hover:shadow-lg"
-                                        style={{
-                                            backgroundColor: BG_MAIN,
-                                            boxShadow: `0 0 5px ${ACCENT}10`
-                                        }}>
-                                        <span className="text-sm md:text-base font-medium" style={{ color: TEXT_PRIMARY }}>Total de Usuarios</span>
-                                        <span className="text-lg md:text-xl font-black" style={{ color: ACCENT }}>{totalUsers}</span>
+                            <div className="p-6 md:p-8 rounded-3xl bg-slate-50 animate-slideInRight h-full flex flex-col">
+                                <h3 className="text-xl font-bold tracking-tight mb-6 text-gray-900">Resumen del Gimnasio</h3>
+                                <div className="space-y-4 flex-grow flex flex-col justify-center">
+                                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 p-4 rounded-2xl bg-white transition-all active:scale-[0.98]">
+                                        <span className="text-sm md:text-base font-medium text-gray-600">Total de Usuarios</span>
+                                        <span className="text-lg md:text-xl font-black text-[#111111]">{totalUsers}</span>
                                     </div>
-                                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 p-4 rounded-2xl transition-all active:scale-[0.98] hover:shadow-lg"
-                                        style={{
-                                            backgroundColor: BG_MAIN,
-                                            boxShadow: `0 0 5px ${ACCENT}10`
-                                        }}>
-                                        <span className="text-sm md:text-base font-medium" style={{ color: TEXT_PRIMARY }}>Abonados ({mesActual})</span>
-                                        <span className="text-lg md:text-xl font-black" style={{ color: ACCENT }}>{abonadosCount}</span>
+                                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 p-4 rounded-2xl bg-white transition-all active:scale-[0.98]">
+                                        <span className="text-sm md:text-base font-medium text-gray-600">Abonados ({mesActual})</span>
+                                        <span className="text-lg md:text-xl font-black text-[#111111]">{abonadosCount}</span>
                                     </div>
-                                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 p-4 rounded-2xl transition-all active:scale-[0.98] hover:shadow-lg"
-                                        style={{
-                                            backgroundColor: BG_MAIN,
-                                            boxShadow: `0 0 5px ${ACCENT}10`
-                                        }}>
-                                        <span className="text-sm md:text-base font-medium" style={{ color: TEXT_PRIMARY }}>No Abonados</span>
-                                        <span className="text-lg md:text-xl font-black" style={{ color: ACCENT }}>{noAbonadosCount}</span>
+                                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 p-4 rounded-2xl bg-white transition-all active:scale-[0.98]">
+                                        <span className="text-sm md:text-base font-medium text-gray-600">No Abonados</span>
+                                        <span className="text-lg md:text-xl font-black text-[#111111]">{noAbonadosCount}</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         {/* Listado de Últimos Usuarios */}
-                        <div className="p-8 rounded-[28px] border shadow-2xl mt-4 md:mt-6 animate-slideInUp"
-                            style={{
-                                backgroundColor: BG_CARD,
-                                borderColor: BORDER_COLOR,
-                                boxShadow: `0 0 15px ${ACCENT}05`
-                            }}>
-                            <h3 className="text-xl font-black tracking-tighter mb-6" style={{ color: TEXT_PRIMARY }}>Últimos 5 Usuarios Registrados</h3>
+                        <div className="p-6 md:p-8 rounded-3xl bg-slate-50 mt-4 md:mt-6 animate-slideInUp">
+                            <h3 className="text-xl font-bold tracking-tight mb-6 text-gray-900">Últimos 5 Usuarios Registrados</h3>
                             <ul className="space-y-3">
                                 {todosMisProductos.slice(0, 5).map((usuario) => (
-                                    <li key={usuario.id} className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 p-4 rounded-2xl transition-all active:scale-[0.98] hover:shadow-xl"
-                                        style={{
-                                            backgroundColor: BG_MAIN,
-                                            boxShadow: `0 0 5px ${ACCENT}10`
-                                        }}>
+                                    <li key={usuario.id} className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 p-4 rounded-2xl bg-white transition-all active:scale-[0.98] hover:shadow-sm">
                                         <div className="flex flex-col">
-                                            <span className="font-bold text-base md:text-lg" style={{ color: TEXT_PRIMARY }}>{usuario.nombre}</span>
-                                            <span className="text-xs" style={{ color: TEXT_SECONDARY }}>{usuario.actividad}</span>
+                                            <span className="font-bold text-base md:text-lg text-gray-900">{usuario.nombre}</span>
+                                            <span className="text-xs text-gray-500">{usuario.actividad}</span>
                                         </div>
-                                        <span className="text-xs md:text-sm font-medium" style={{ color: TEXT_SECONDARY }}>{usuario.fechaCreacion}</span>
+                                        <span className="text-xs md:text-sm font-medium text-gray-500">{usuario.fechaCreacion}</span>
                                     </li>
                                 ))}
                             </ul>
@@ -1015,13 +962,8 @@ const Admin = () => {
 
                 {/* Secciones de Usuarios (Común para Usuarios, Abonados, No Abonados) */}
                 {(seccionActiva === 'Usuarios' || seccionActiva === 'Abonados' || seccionActiva === 'No Abonados') && (
-                    <section className="mb-6 md:mb-10 p-8 rounded-[28px] shadow-2xl border animate-fadeIn"
-                        style={{
-                            backgroundColor: BG_CARD,
-                            borderColor: BORDER_COLOR,
-                            boxShadow: `0 0 15px ${ACCENT}05`
-                        }}>
-                        <h2 className="text-3xl font-black tracking-tighter mb-6 text-center" style={{ color: TEXT_PRIMARY }}>
+                    <section className="mb-6 md:mb-10 p-6 md:p-8 rounded-3xl bg-slate-50 animate-fadeIn">
+                        <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-8 text-center text-gray-900">
                             {seccionActiva === 'Usuarios' && 'Gestión de Usuarios'}
                             {seccionActiva === 'Abonados' && `Abonados (${mesActual})`}
                             {seccionActiva === 'No Abonados' && `No Abonados`}
@@ -1029,19 +971,8 @@ const Admin = () => {
 
                         {/* Barra de Búsqueda */}
                         <div className="mb-6 relative">
-                            <input
-                                type="text"
-                                placeholder="Buscar por nombre, actividad o email..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full p-4 pl-12 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-white/20 transition-all font-bold"
-                                style={{ backgroundColor: BG_MAIN, color: TEXT_PRIMARY, borderColor: BORDER_COLOR }}
-                            />
-                            <svg
-                                className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5"
-                                style={{ color: TEXT_SECONDARY }}
-                                fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                            >
+                            <input type="text" placeholder="Buscar por nombre, actividad o email..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full p-4 pl-12 rounded-2xl bg-white focus:outline-none focus:ring-2 focus:ring-[#111111]/10 transition-all font-medium text-gray-900" />
+                            <svg className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                             </svg>
                         </div>
@@ -1054,20 +985,11 @@ const Admin = () => {
                                         return mesDelPago === mesActual;
                                     });
 
-                                    const statusColor = estaPagadoEsteMes ? ACCENT : TEXT_SECONDARY;
+                                    
 
-                                    const paymentButtonStyles = estaPagadoEsteMes
-                                        ? {
-                                            backgroundColor: BG_MAIN,
-                                            color: ACCENT,
-                                            border: `1px solid ${ACCENT}`,
-                                            boxShadow: `0 0 8px ${ACCENT}60`
-                                        }
-                                        : {
-                                            backgroundColor: ACCENT,
-                                            color: BG_MAIN,
-                                            boxShadow: `0 0 8px ${ACCENT}60`
-                                        };
+                                    const paymentButtonClasses = estaPagadoEsteMes 
+        ? "bg-white text-gray-700 border border-gray-200 hover:bg-gray-50" 
+        : "bg-[#111111] text-white hover:bg-zinc-800";
 
                                     const lastPayment = usuario.meses[usuario.meses.length - 1];
 
@@ -1079,73 +1001,26 @@ const Admin = () => {
 
 
                                     return (
-                                        <li key={usuario.id} className="p-5 rounded-[28px] shadow-lg border flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 transition-all active:scale-[0.98] hover:shadow-2xl"
-                                            style={{
-                                                backgroundColor: BG_MAIN,
-                                                borderColor: BORDER_COLOR,
-                                                boxShadow: `0 0 10px ${ACCENT}15`,
-                                            }}>
+                                        <li key={usuario.id} className="p-5 rounded-3xl bg-white flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 transition-all hover:shadow-md">
                                             <div className="flex flex-col flex-grow w-full lg:w-auto">
                                                 <div className="flex flex-wrap items-center gap-3 mb-1">
-                                                    <span className="font-bold text-base md:text-xl" style={{ color: TEXT_PRIMARY }}>{usuario.nombre}</span>
-                                                    <span className={`text-xs font-black uppercase tracking-widest px-2 py-1 rounded-full flex-shrink-0`}
-                                                        style={{
-                                                            backgroundColor: estaPagadoEsteMes ? 'rgba(255,255,255,0.1)' : 'rgba(28,28,30,0.5)',
-                                                            color: statusColor,
-                                                        }}>
+                                                    <span className="font-bold text-base md:text-xl text-gray-900">{usuario.nombre}</span>
+                                                    <span className={`text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full flex-shrink-0 ${estaPagadoEsteMes ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
                                                         {estaPagadoEsteMes ? 'ABONADO' : 'NO ABONADO'}
                                                     </span>
                                                 </div>
-                                                <span className="text-xs md:text-sm" style={{ color: TEXT_SECONDARY }}>Email: {usuario.email}</span>
-                                                <span className="text-xs md:text-sm" style={{ color: TEXT_SECONDARY }}>Tel: {usuario.numero}</span>
-                                                <span className="text-sm mt-2" style={{ color: TEXT_PRIMARY }}>
-                                                    Actividad: <span className="font-semibold" style={{ color: ACCENT }}>{usuario.actividad}</span>
-                                                </span>
-                                                <span className="text-xs italic mt-1 hidden sm:block" style={{ color: TEXT_SECONDARY }}>
-                                                    Registro: {usuario.fechaCreacion} | Último pago: <span style={{ color: statusColor }}>{ultimoPagoDisplay}</span>
-                                                </span>
+                                                <span className="text-xs md:text-sm text-gray-500">Email: {usuario.email}</span>
+                                                <span className="text-xs md:text-sm text-gray-500">Tel: {usuario.numero}</span>
+                                                <span className="text-sm mt-2 text-gray-700">Actividad: <span className="font-semibold text-gray-900">{usuario.actividad}</span></span>
+                                                <span className="text-xs mt-1 hidden sm:block text-gray-400">Registro: {usuario.fechaCreacion} | Último pago: <span className={estaPagadoEsteMes ? "text-green-600" : "text-red-600"}>{ultimoPagoDisplay}</span></span>
                                             </div>
                                             <div className="flex flex-wrap gap-3 justify-end w-full lg:w-auto">
-                                                <button
-                                                    onClick={() => setUsuarioDetalle(usuario)}
-                                                    className="px-4 py-2 font-bold rounded-xl shadow-sm transition-all active:scale-[0.95] text-xs md:text-sm"
-                                                    style={{
-                                                        backgroundColor: ACCENT,
-                                                        color: BG_MAIN,
-                                                        boxShadow: `0 0 5px ${ACCENT}50`
-                                                    }}
-                                                >
-                                                    Pefil
-                                                </button>
-                                                <button
-                                                    onClick={() => setProductoAEditar(usuario)}
-                                                    className="px-4 py-2 font-bold rounded-xl shadow-sm transition-all active:scale-[0.95] text-xs md:text-sm"
-                                                    style={{
-                                                        backgroundColor: BG_CARD,
-                                                        color: ACCENT,
-                                                        border: `1px solid ${ACCENT}`,
-                                                        boxShadow: `0 0 5px ${ACCENT}50`
-                                                    }}
-                                                >
-                                                    Editar
-                                                </button>
-                                                <button
-                                                    onClick={() => handleToggleMesPagado(usuario, estaPagadoEsteMes)}
-                                                    className="px-4 py-2 font-bold rounded-xl shadow-sm transition-all active:scale-[0.95] text-xs md:text-sm"
-                                                    style={paymentButtonStyles}
-                                                >
+                                                <button onClick={() => setUsuarioDetalle(usuario)} className="px-4 py-2 font-bold rounded-xl transition-all active:scale-[0.95] text-xs md:text-sm bg-gray-100 text-gray-800 hover:bg-gray-200">Perfil</button>
+                                                <button onClick={() => setProductoAEditar(usuario)} className="px-4 py-2 font-bold rounded-xl transition-all active:scale-[0.95] text-xs md:text-sm bg-white border border-gray-200 text-gray-700 hover:bg-gray-50">Editar</button>
+                                                <button onClick={() => handleToggleMesPagado(usuario, estaPagadoEsteMes)} className={`px-4 py-2 font-bold rounded-xl transition-all active:scale-[0.95] text-xs md:text-sm ${paymentButtonClasses}`}>
                                                     {estaPagadoEsteMes ? 'Desmarcar' : 'Marcar'}
                                                 </button>
-                                                <button
-                                                    onClick={() => handleEliminarProducto(usuario.id)}
-                                                    className="px-4 py-2 font-bold rounded-xl shadow-sm transition-all active:scale-[0.95] text-xs md:text-sm"
-                                                    style={{
-                                                        backgroundColor: BG_CARD,
-                                                        color: '#FF4444',
-                                                        border: `1px solid #FF4444`,
-                                                        boxShadow: `0 0 5px #FF444450`
-                                                    }}
-                                                >
+                                                <button onClick={() => handleEliminarProducto(usuario.id)} className="px-4 py-2 font-bold rounded-xl transition-all active:scale-[0.95] text-xs md:text-sm bg-red-50 text-red-600 hover:bg-red-100">
                                                     Eliminar
                                                 </button>
                                             </div>
@@ -1153,7 +1028,7 @@ const Admin = () => {
                                     );
                                 })
                             ) : (
-                                <li className="text-center py-8 text-white/40 italic font-medium">No hay usuarios que coincidan con la búsqueda o el filtro.</li>
+                                <li className="text-center py-8 text-black/40 italic font-medium">No hay usuarios que coincidan con la búsqueda o el filtro.</li>
                             )}
                         </ul>
                         {productoAEditar && <EditarActividadModal producto={productoAEditar} onGuardarCambios={handleEditarActividad} setProductoAEditar={setProductoAEditar} opcionesActividad={opcionesActividad} />}

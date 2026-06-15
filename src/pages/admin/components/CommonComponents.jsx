@@ -1,34 +1,21 @@
 import React from 'react';
 
-const BACKGROUND_GRADIENT_START = '#1a1a1a';
-const BACKGROUND_GRADIENT_END = '#0a0a0a';
-const TEXT_COLOR_WHITE = '#ffffff';
-const TEXT_COLOR_YELLOW = '#fdcc0d';
-const LIGHT_GLOW_COLOR = '#ffeb3b';
-const BORDER_HIGHLIGHT_COLOR = '#333333';
-
 const Modal = ({ isOpen, onClose, title, children, width = 'max-w-md' }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50 p-4 backdrop-blur-sm" onClick={onClose}>
+    <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 p-4 backdrop-blur-sm animate-fadeIn" onClick={onClose}>
       <div
-        className={`p-8 rounded-xl shadow-2xl border ${width} max-h-[90vh] overflow-y-auto animate-scaleIn`}
-        style={{
-          backgroundColor: BACKGROUND_GRADIENT_START,
-          borderColor: LIGHT_GLOW_COLOR,
-          boxShadow: `0 0 20px ${LIGHT_GLOW_COLOR}40`,
-        }}
+        className={`p-8 md:p-10 rounded-[32px] bg-white shadow-2xl ${width} max-h-[90vh] overflow-y-auto animate-scaleIn`}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex justify-between items-center mb-6 border-b pb-3" style={{ borderColor: BORDER_HIGHLIGHT_COLOR }}>
-          <h3 className="text-2xl font-bold" style={{ color: TEXT_COLOR_WHITE }}>
+        <div className="flex justify-between items-center mb-8 pb-4 border-b border-gray-100">
+          <h3 className="text-2xl md:text-3xl font-bold tracking-tight text-gray-900">
             {title}
           </h3>
           <button
             onClick={onClose}
-            className="hover:text-yellow-400 transition-colors"
-            style={{ color: TEXT_COLOR_WHITE }}
+            className="p-2 rounded-2xl hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-900"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -42,40 +29,23 @@ const Modal = ({ isOpen, onClose, title, children, width = 'max-w-md' }) => {
 };
 
 const FormField = ({ label, type = 'text', name, value, onChange, options, placeholder, required, step }) => {
-  const inputStyle = {
-    marginTop: '4px',
-    width: '100%',
-    padding: '10px 12px',
-    border: `1px solid ${BORDER_HIGHLIGHT_COLOR}`,
-    borderRadius: '8px',
-    backgroundColor: BACKGROUND_GRADIENT_END,
-    color: TEXT_COLOR_WHITE,
-    outline: 'none',
-    transition: 'border-color 0.2s',
-  };
-
-  const labelStyle = {
-    display: 'block',
-    fontSize: '14px',
-    fontWeight: '500',
-    color: TEXT_COLOR_WHITE,
-    marginBottom: '4px',
-  };
+  const labelClass = "block text-xs font-semibold text-gray-500 mb-2 ml-1";
+  const inputClass = "w-full p-4 rounded-2xl bg-slate-50 focus:outline-none focus:ring-2 focus:ring-[#111111]/10 text-gray-900 font-medium transition-all shadow-sm";
 
   if (type === 'select') {
     return (
-      <div className="mb-4">
-        <label style={labelStyle}>{label}</label>
+      <div className="mb-6">
+        <label className={labelClass}>{label}</label>
         <select
           name={name}
           value={value || ''}
           onChange={onChange}
-          style={inputStyle}
+          className={`${inputClass} appearance-none cursor-pointer`}
           required={required}
         >
           <option value="">Seleccionar...</option>
           {options?.map((opt) => (
-            <option key={opt.value} value={opt.value} style={{ backgroundColor: BACKGROUND_GRADIENT_END }}>
+            <option key={opt.value} value={opt.value}>
               {opt.label}
             </option>
           ))}
@@ -86,14 +56,14 @@ const FormField = ({ label, type = 'text', name, value, onChange, options, place
 
   if (type === 'textarea') {
     return (
-      <div className="mb-4">
-        <label style={labelStyle}>{label}</label>
+      <div className="mb-6">
+        <label className={labelClass}>{label}</label>
         <textarea
           name={name}
           value={value || ''}
           onChange={onChange}
           placeholder={placeholder}
-          style={{ ...inputStyle, minHeight: '80px', resize: 'vertical' }}
+          className={`${inputClass} resize-none`}
           rows={3}
         />
       </div>
@@ -101,8 +71,8 @@ const FormField = ({ label, type = 'text', name, value, onChange, options, place
   }
 
   return (
-    <div className="mb-4">
-      <label style={labelStyle}>{label}</label>
+    <div className="mb-6">
+      <label className={labelClass}>{label}</label>
       <input
         type={type}
         name={name}
@@ -111,74 +81,48 @@ const FormField = ({ label, type = 'text', name, value, onChange, options, place
         placeholder={placeholder}
         required={required}
         step={step}
-        style={inputStyle}
+        className={inputClass}
       />
     </div>
   );
 };
 
 const ActionButton = ({ onClick, label, variant = 'primary', icon }) => {
-  const baseStyle = {
-    padding: '10px 16px',
-    borderRadius: '8px',
-    border: 'none',
-    cursor: 'pointer',
-    fontWeight: '600',
-    fontSize: '14px',
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: '6px',
-    transition: 'all 0.2s',
-  };
+  const baseClass = "px-6 py-4 rounded-2xl font-bold inline-flex items-center justify-center gap-2 transition-all active:scale-[0.98]";
 
   const variants = {
-    primary: {
-      backgroundColor: TEXT_COLOR_YELLOW,
-      color: BACKGROUND_GRADIENT_END,
-      boxShadow: `0 0 8px ${LIGHT_GLOW_COLOR}60`,
-    },
-    secondary: {
-      backgroundColor: BACKGROUND_GRADIENT_START,
-      color: TEXT_COLOR_YELLOW,
-      border: `1px solid ${TEXT_COLOR_YELLOW}`,
-    },
-    danger: {
-      backgroundColor: BACKGROUND_GRADIENT_END,
-      color: '#FF4444',
-      border: `1px solid #FF4444`,
-    },
-    ghost: {
-      backgroundColor: 'transparent',
-      color: TEXT_COLOR_WHITE,
-      border: `1px solid ${BORDER_HIGHLIGHT_COLOR}`,
-    },
+    primary: "bg-[#111111] text-white hover:bg-zinc-800 shadow-md",
+    secondary: "bg-slate-100 text-[#111111] hover:bg-slate-200",
+    danger: "bg-red-50 text-red-600 hover:bg-red-100",
+    ghost: "bg-white border border-gray-200 text-gray-700 hover:bg-gray-50",
   };
 
   return (
     <button
       onClick={onClick}
-      style={{ ...baseStyle, ...variants[variant] }}
-      className="hover:scale-105 transition-transform"
+      className={`${baseClass} ${variants[variant] || variants.primary}`}
     >
-      {icon && <span className="w-4 h-4">{icon}</span>}
+      {icon && <span className="w-5 h-5">{icon}</span>}
       {label}
     </button>
   );
 };
 
 const StatusBadge = ({ status, variant = 'default' }) => {
+  // CRITICAL RULE: DO NOT ALTER STATUS COLORS
   const colors = {
-    active: { bg: `${TEXT_COLOR_YELLOW}20`, text: TEXT_COLOR_YELLOW, glow: LIGHT_GLOW_COLOR },
-    inactive: { bg: `${BORDER_HIGHLIGHT_COLOR}50`, text: TEXT_COLOR_WHITE, glow: 'none' },
+    active: { bg: 'rgba(253, 204, 13, 0.2)', text: '#fdcc0d', glow: '#ffeb3b' },
+    inactive: { bg: 'rgba(51, 51, 51, 0.5)', text: '#ffffff', glow: 'none' },
     danger: { bg: '#FF444430', text: '#FF4444', glow: '#FF4444' },
     success: { bg: '#1A472A40', text: '#4ADE80', glow: '#4ADE80' },
+    default: { bg: 'rgba(51, 51, 51, 0.5)', text: '#ffffff', glow: 'none' }
   };
 
   const c = colors[variant] || colors.default;
 
   return (
     <span
-      className="text-xs font-semibold px-2 py-1 rounded-full"
+      className="text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full flex-shrink-0"
       style={{ backgroundColor: c.bg, color: c.text, textShadow: `0 0 5px ${c.glow}` }}
     >
       {status}
@@ -187,11 +131,3 @@ const StatusBadge = ({ status, variant = 'default' }) => {
 };
 
 export { Modal, FormField, ActionButton, StatusBadge };
-export {
-  BACKGROUND_GRADIENT_START,
-  BACKGROUND_GRADIENT_END,
-  TEXT_COLOR_WHITE,
-  TEXT_COLOR_YELLOW,
-  LIGHT_GLOW_COLOR,
-  BORDER_HIGHLIGHT_COLOR,
-};

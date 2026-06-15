@@ -243,54 +243,43 @@ const Rutina = () => {
                     </div>
 
                     {userRoutine && userRoutine.ejercicios && userRoutine.ejercicios.length > 0 ? (
-                        <div className="grid grid-cols-1 gap-4">
-                            {userRoutine.ejercicios.map((ejercicio, index) => {
-                                const isCompleted = completedExercises.includes(index);
-                                return (
-                                    <div
-                                        key={index}
-                                        className={`bg-[#1C1C1E] p-6 sm:p-8 rounded-[28px] md:rounded-[32px] border transition-all ${isCompleted ? 'border-white/5 opacity-60' : 'border-[#2C2C2E]'}`}
-                                    >
-                                        <div className="flex justify-between items-start mb-8">
-                                            <div className="flex items-center gap-5">
-                                                <div
-                                                    onClick={() => toggleExerciseCompletion(index)}
-                                                    className={`w-8 h-8 cursor-pointer rounded-full border-2 flex items-center justify-center transition-all ${isCompleted ? 'bg-white border-white' : 'border-[#444446]'}`}
-                                                >
-                                                    {isCompleted && <Check className="w-4 h-4 text-black stroke-[4px]" />}
-                                                </div>
-                                                <span className={`text-base sm:text-xl font-bold uppercase tracking-tight ${isCompleted ? 'line-through text-[#8E8E93]' : 'text-white'}`}>
+                        <div className="bg-[#1C1C1E] p-4 sm:p-6 rounded-[28px] md:rounded-[32px] border border-[#2C2C2E]">
+                            <div className="flex flex-col gap-5 sm:gap-6">
+                                {userRoutine.ejercicios.map((ejercicio, index) => {
+                                    const isCompleted = completedExercises.includes(index);
+                                    return (
+                                        <div
+                                            key={index}
+                                            onClick={() => toggleExerciseCompletion(index)}
+                                            className={`flex items-center gap-4 cursor-pointer transition-all ${isCompleted ? 'opacity-50' : 'opacity-100 hover:opacity-80'}`}
+                                        >
+                                            {/* Imagen del ejercicio */}
+                                            <div className="w-[72px] h-[72px] rounded-2xl overflow-hidden shrink-0 bg-[#2C2C2E] relative border border-white/5">
+                                                <img 
+                                                    src={ejercicio.imagen || ejercicio.gifUrl || "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=150&auto=format&fit=crop"} 
+                                                    alt={ejercicio.ejercicio || ejercicio.nombre} 
+                                                    className="w-full h-full object-cover"
+                                                />
+                                                {isCompleted && (
+                                                    <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                                                        <Check className="w-6 h-6 text-white" />
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            {/* Detalles del ejercicio */}
+                                            <div className="flex flex-col justify-center flex-1">
+                                                <h4 className={`text-[17px] font-bold mb-0.5 tracking-tight ${isCompleted ? 'line-through text-[#8E8E93]' : 'text-white'}`}>
                                                     {ejercicio.ejercicio || ejercicio.nombre}
-                                                </span>
+                                                </h4>
+                                                <p className="text-[15px] font-medium text-[#8E8E93]">
+                                                    {ejercicio.equipo || 'Machine'} · {ejercicio.series}x{ejercicio.repeticiones} reps
+                                                </p>
                                             </div>
                                         </div>
-
-                                        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-8 mt-auto">
-                                            <div className="flex gap-4 sm:gap-10">
-                                                <div className="flex flex-col">
-                                                    <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-[#8E8E93] mb-3">Sets x Reps</span>
-                                                    <span className="text-[10px] sm:text-xs font-black text-white tracking-widest bg-[#2C2C2E] px-4 py-2 rounded-xl inline-block w-fit">
-                                                        {ejercicio.series} X {ejercicio.repeticiones}
-                                                    </span>
-                                                </div>
-                                                <div className="flex flex-col">
-                                                    <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-[#8E8E93] mb-3">Peso Sugerido</span>
-                                                    <span className="text-[10px] sm:text-xs font-black text-white tracking-widest bg-[#2C2C2E] px-4 py-2 rounded-xl inline-block w-fit">
-                                                        {ejercicio.peso ? `${ejercicio.peso}KG` : '--'}
-                                                    </span>
-                                                </div>
-                                            </div>
-
-                                            <button
-                                                onClick={() => toggleExerciseCompletion(index)}
-                                                className={`px-8 py-3.5 rounded-full text-[10px] font-black uppercase tracking-widest border border-transparent transition-all active:scale-95 ${isCompleted ? 'bg-[#2C2C2E] text-white' : 'bg-white text-black'}`}
-                                            >
-                                                {isCompleted ? 'Reabrir Ejercicio' : 'Marcar Completado'}
-                                            </button>
-                                        </div>
-                                    </div>
-                                );
-                            })}
+                                    );
+                                })}
+                            </div>
                         </div>
                     ) : (
                         <div className="bg-[#1C1C1E] p-12 rounded-[28px] border border-dashed border-[#2C2C2E] text-center">
